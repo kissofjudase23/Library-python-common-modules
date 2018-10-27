@@ -2,18 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import hashlib
+
 import boto3
 from botocore.exceptions import ClientError
 from botocore.config import Config
 
-
-
-class NoMatchQueueError(ValueError):
-    pass
-
-
-class SendMessageError(ValueError):
-    pass
+from ..exc import SendMsgError, DelMsgError, ReceiveMsgError, NoMatchQueueError
 
 
 class SQSUtility(object):
@@ -60,13 +54,10 @@ class SQSUtility(object):
             if 'QueueUrls' in res:
                 return res['QueueUrls']
             else:
-                self.logger.info("No match url with the name prefix{0}"
-                                 .format(queue_name_prefix))
-                raise NoMatchQueueError()
+                raise NoMatchQueueError(f'No match url with the name prefix:{queue_name_prefix}')
 
         except ClientError as e:
-            self.logger.error(e)
-            raise e
+            raise NoMatchQueueError(f'No match queue error, err:{e}') from e
 
     def delete_message(self, queue_url, receipt_handle):
         """
@@ -81,8 +72,7 @@ class SQSUtility(object):
             self.sqs.delete_message(QueueUrl=queue_url,
                                     ReceiptHandle=receipt_handle)
         except ClientError as e:
-            self.logger.error(e)
-            raise e
+            raise DelMsgError(f'Delete Message err, err:{e}')
 
     def receive_message(self,
                         queue_url,
@@ -111,8 +101,7 @@ class SQSUtility(object):
             return res['Messages']
 
         except ClientError as e:
-            self.logger.error(e)
-            raise e
+            raise ReceiveMsgError(f'Receive Message Error, err:{e}') from e
 
     def send_message(self,
                      queue_url,
@@ -147,18 +136,11 @@ class SQSUtility(object):
             if 'MD5OfMessageBody' not in res:
                 self.logger.warn("Does not receive MD5OfMessageBody, msg_body="
                                  .format(msg_body))
-                raise SendMessageError("Does not receive MD5OfMessageBody")
+                raise SendMsgError('Does not receive MD5OfMessageBody')
 
             res_md5_of_msg_body = res['MD5OfMessageBody']
             if res_md5_of_msg_body != hashlib.md5(msg_body.encode()).hexdigest():
-                self.logger.warn("response md5 is not as expected, msg_body={}"
-                                 .format(msg_body))
-                raise SendMessageError("MD5OfMessageBody Check Failed")
+                raise SendMsgError(f'MD5OfMessageBody check Failed, msg_body:{msg_body}')
 
         except ClientError as e:
-            self.logger.error(e)
-            raise e
-
-
-if __name__ == '__main__':
-    pass
+            raise SendMsgError(f'Send Message Error, err:{e}') from e
