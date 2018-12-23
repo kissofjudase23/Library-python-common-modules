@@ -10,6 +10,15 @@ class TransCoder(object):
         return base64.b64decode(b64str).decode(encoding)
 
     @staticmethod
+    def lazy_decode_base64(b64str, *, encoding='utf-8'):
+        if not b64str:
+            return None
+        try:
+            return base64.b64decode(b64str).decode(encoding)
+        except Exception:
+            return None
+
+    @staticmethod
     def encode_base64(str_, *, encoding='utf-8'):
         if not str_:
             return

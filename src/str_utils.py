@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-class StrUtility(object):
+class StrUtils(object):
 
     @classmethod
     def to_str(cls, bytes_or_str):
