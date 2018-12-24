@@ -14,6 +14,7 @@ class LogMode(IntEnum):
 
 class LogFactory(object):
 
+    # TODO, output to JASON Format
     _SYSLOG_SOCKET = "/dev/log"
     _FORMATTER = logging.Formatter(
         "[%(asctime)s]-[%(levelname)s]"
