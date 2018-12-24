@@ -12,7 +12,7 @@ all:
 	@run_test
 
 clean_cache:
-	find . | grep -E "\(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf &&
+	find . | grep -E "\(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf && \
 	rm -rf ./htmlcov
 
 # build a docker images for develop
