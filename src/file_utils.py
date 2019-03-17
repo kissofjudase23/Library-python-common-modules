@@ -35,8 +35,9 @@ class FileUtility(object):
         """ get the line number of fname
         """
         p = subprocess.run(['wc', '-l', file_path],
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
+                           stdout=subprocess.PIPE,
+                           stderr=subprocess.PIPE)
+
         result, err = p.stdout, p.stderr
         if p.returncode != 0:
             raise IOError(err)
