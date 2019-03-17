@@ -28,3 +28,11 @@ class ReceiveMsgError(SQSBaseError):
 
 class NoMatchQueueError(SQSBaseError):
     pass
+
+
+class FileBaseError(BaseError):
+    pass
+
+class HDFSError(FileBaseError):
+    pass
+

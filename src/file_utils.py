@@ -1,8 +1,31 @@
 import glob
 import json
 import os
-import pickle
+import subprocess
 import shutil
+import pickle
+
+from .exc import HDFSError
+
+
+class HDFSUtils(object):
+    @staticmethod
+    def mkdir(path):
+        p = subprocess.run(['hadoop', 'fs', '-mkdir', '-p', path])
+        if p.returncode != 0:
+            raise HDFSError(f'create hdfs path:{path} error')
+
+    @staticmethod
+    def rm(path):
+        p = subprocess.run(['hadoop', 'fs', '-rm', '-r', path])
+        if p.returncode != 0:
+            raise HDFSError(f'rm path:{path} error')
+
+    @staticmethod
+    def put(src_path, dst_path):
+        p = subprocess.run(['hadoop', 'fs', '-put', '-f', src_path, dst_path])
+        if p.returncode != 0:
+            raise HDFSError(f'put file:{src_path} to hdfs:{dst_path} error')
 
 
 class FileUtility(object):
