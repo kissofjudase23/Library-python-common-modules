@@ -31,6 +31,18 @@ class HDFSUtils(object):
 class FileUtility(object):
 
     @staticmethod
+    def get_file_len(file_path):
+        """ get the line number of fname
+        """
+        p = subprocess.run(['wc', '-l', file_path],
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        result, err = p.stdout, p.stderr
+        if p.returncode != 0:
+            raise IOError(err)
+        return int(result.strip().split()[0])
+
+    @staticmethod
     def read_json_file(file_path):
         with open(file_path, 'r') as f:
             return json.load(f)
