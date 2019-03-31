@@ -4,3 +4,4 @@ pytest
 pytest-cov
 sqlalchemy
 pymysql
+nltk

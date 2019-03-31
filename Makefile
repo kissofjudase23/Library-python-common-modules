@@ -1,12 +1,6 @@
 include MK/docker.mk
 
-# docker environment
-HOST_PATH  ?= "$(shell pwd)"
-GUEST_PATH ?= "/tmp/$(shell basename $(HOST_PATH))"
-DOCKERFILE ?= "dockerfile"
-DOCKER_REPO ?= "$(shell basename $(HOST_PATH) | tr '[:upper:]' '[:lower:]')"
-DOCKER_TAG  ?= "develop"
-
+SERVICE_NAME ?= "library-python-common-modules"
 
 all:
 	@run_test
@@ -15,34 +9,40 @@ clean_cache:
 	find . | grep -E "\(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf && \
 	rm -rf ./htmlcov
 
-# build a docker images for develop
-build_dev:
-	@make docker_build
 
-run_dev_inspect:
-	@make docker_inspect
+test: clean_cache
+	pytest --pyargs -v ./
 
-run_dev_stop:
-	@make docker_stop
-
-# create a container to debug (SSH loging)
-run_debug:
-	@make docker_run_debug
-
-# run coverage test in docker
-run_dev_coverage: clean_cache
-	@make docker_run TEST_COMMAND="pytest --pyargs --cov-report=html --cov-config=.coveragerc --cov=./"
-	
-# run test in host
 coverage: clean_cache
 	pytest --pyargs --cov-report=html --cov-config=.coveragerc --cov=./
 
+
+up:
+	docker-compose up -d --build
+
+attach:
+	docker exec -it $(SERVICE_NAME) make test
+
+down:
+	docker-compose down
+
+run_test:
+	docker-compose exec -it  make test
+
+run_coverage:
+	docker exec -it $(SERVICE_NAME) make coverage
+
+
+
+
+
+
+	
 # run test in docker 
 run_dev_test: clean_cache
 	@make docker_run TEST_COMMAND="pytest --pyargs -v ./"	
 
-test: clean_cache
-	pytest --pyargs -v ./
+
 	
 
 

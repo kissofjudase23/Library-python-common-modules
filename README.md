@@ -1,17 +1,17 @@
-# python_common_library
-
-## Prequisites
-   - python3.6
+# python common modules
 
 ## How to Test
 ```bash
-# build docker image
-make build_dev
+# build docker image and start the daemon
+make up
 
-# run coverage test
-make run_dev_coverage 
+# run test and generate coverage test report
+make run_coverage 
 
 # run test
-make run_dev_test 
+make run_test
+
+# stop the service
+make down
 ```
   

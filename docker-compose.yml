@@ -1,0 +1,15 @@
+version: "3.6"
+services:
+  library:
+    build:
+      context: ./
+      dockerfile: dockerfile
+      args:
+        work_dir: /tmp/python-common-modules
+    image: library-python-common-modules:develop
+    container_name: library-python-common-modules
+    volumes:
+      - type: bind
+        source: ./
+        target: /tmp/python-common-modules
+    tty: true
