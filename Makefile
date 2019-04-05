@@ -8,6 +8,8 @@ clean_cache:
 	find . | grep -E "\(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf && \
 	rm -rf ./htmlcov
 
+clean: clean_cache
+
 test: clean_cache
 	pytest --pyargs -v ./
 
@@ -18,7 +20,7 @@ up:
 	docker-compose up -d --build
 
 attach:
-	docker exec -it $(SERVICE_NAME) make test
+	docker exec -it $(SERVICE_NAME) make /bin/bash
 
 down:
 	docker-compose down
