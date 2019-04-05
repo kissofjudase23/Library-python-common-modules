@@ -1,5 +1,5 @@
 [run]
 omit =
     */__init__.py
-    */pkg/tests/*.py
+    */common/tests/*.py
 
