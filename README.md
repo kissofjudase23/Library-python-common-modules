@@ -1,6 +1,6 @@
-# python common modules
+# Common Package
 
-## How to Test
+## Cheat Sheet
 ```bash
 # build docker image and start the daemon
 make up
