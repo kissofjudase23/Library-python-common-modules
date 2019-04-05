@@ -6,6 +6,10 @@ class BaseError(ValueError):
     pass
 
 
+class ArgError(BaseError):
+    pass
+
+
 class AwsBaseError(BaseError):
     pass
 
