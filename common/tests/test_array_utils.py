@@ -26,3 +26,24 @@ class TestArrayUtils(object):
     def test_is_unique_char(self, a, expected):
         actual = ArrayUtils.rotate(a)
         assert np.array_equal(actual, expected) is True
+
+    @pytest.mark.parametrize('a, expected', [
+        pytest.param(np.array([[1, 2, 3],
+                               [4, 5, 6],
+                               [7, 8, 9]]),
+                     np.array([[7, 4, 1],
+                               [8, 5, 2],
+                               [9, 6, 3]])),
+
+        pytest.param(np.array([[1, 2, 3, 4],
+                               [5, 6, 7, 8],
+                               [9, 10, 11, 12],
+                               [13, 14, 15, 16]]),
+                     np.array([[13, 9, 5, 1],
+                               [14, 10, 6, 2],
+                               [15, 11, 7, 3],
+                               [16, 12, 8, 4]])),
+    ])
+    def test_is_unique_char(self, a, expected):
+        actual = ArrayUtils.rotate_in_place(a)
+        assert np.array_equal(actual, expected) is True
