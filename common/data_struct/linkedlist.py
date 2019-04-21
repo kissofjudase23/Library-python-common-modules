@@ -1,5 +1,7 @@
 import sys
 
+from ..exc import ArgError
+
 
 class Node(object):
 
@@ -104,6 +106,31 @@ class LinkedList(object):
             else:
                 runner = runner.next
 
+    def get_kth_from_front(self, k):
+        if k <= 0:
+            raise ArgError('k must be greater than 1')
+
+        if k > self.len:
+            raise ArgError('out of range')
+
+        runner = self.head
+        for _ in range(k-1):
+            runner = runner.next
+
+        return runner.data
+
+    def get_kth_from_back(self, k):
+        """
+        """
+        if k <= 0:
+            raise ArgError('k must be greater than 1')
+
+        if k > self.len:
+            raise ArgError('out of range')
+
+        forward = self.len - k + 1
+        return self.get_kth_from_front(forward)
+
     def push_back_bulk(self, input_list):
         """ O(n) """
         for i in input_list:
@@ -130,6 +157,26 @@ class LinkedList(object):
             else:
                 prev = runner
                 runner = runner.next
+
+    def remove_duplicate(self):
+        """ time:  O(n)
+            space: O(n)
+        """
+        if self.len <= 1:
+            return
+
+        hash_table = dict()
+        prev = None
+        cur = self.head
+        while cur:
+            if cur.data in hash_table:
+                if prev:
+                    prev.next = cur.next
+            else:
+                hash_table[cur.data] = True
+                prev = cur
+
+            cur = cur.next
 
     def reverse(self):
         """ O(n) """

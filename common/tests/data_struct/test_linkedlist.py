@@ -89,3 +89,44 @@ class TestLinkedList(object):
         ll.reverse()
 
         assert ll.__repr__() == expected
+
+    @pytest.mark.parametrize('datas, expected', [
+        pytest.param([1, 2, 3], "1->2->3"),
+        pytest.param([1, 1], "1"),
+        pytest.param([1, 1, 1, 1, 1], "1"),
+        pytest.param([1, 2, 2, 2, 3], "1->2->3"),
+        pytest.param([1, 2, 3, 3, 3], "1->2->3"),
+        pytest.param([1, 1, 3, 3, 5, 5], "1->3->5"),
+
+    ])
+    def test_remove_duplicate(self, datas, expected):
+        l1 = LinkedList()
+        l1.push_back_bulk(datas)
+        l1.remove_duplicate()
+        assert l1.__repr__() == expected
+
+    @pytest.mark.parametrize('datas, k, expected', [
+        pytest.param([1, 3, 5, 7, 9], 1, 1),
+        pytest.param([1, 3, 5, 7, 9], 2, 3),
+        pytest.param([1, 3, 5, 7, 9], 3, 5),
+        pytest.param([1, 3, 5, 7, 9], 5, 9)
+    ])
+    def test_get_kth_from_front(self, datas, k, expected):
+        ll = LinkedList()
+        ll.push_back_bulk(datas)
+
+        actual = ll.get_kth_from_front(k)
+        assert actual == expected
+
+    @pytest.mark.parametrize('datas, k, expected', [
+        pytest.param([1, 3, 5, 7, 9], 1, 9),
+        pytest.param([1, 3, 5, 7, 9], 2, 7),
+        pytest.param([1, 3, 5, 7, 9], 3, 5),
+        pytest.param([1, 3, 5, 7, 9], 5, 1)
+    ])
+    def test_get_kth_from_back(self, datas, k, expected):
+        ll = LinkedList()
+        ll.push_back_bulk(datas)
+
+        actual = ll.get_kth_from_back(k)
+        assert actual == expected
