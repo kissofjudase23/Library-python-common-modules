@@ -24,6 +24,41 @@ def is_equal(l1, l2):
     return True
 
 
+def is_palindrome(l):
+    """
+    time:  O(n)
+    space: O(n)
+    use fast and flow runner to control flow
+    """
+
+    len = l.len
+    if len == 0:
+        return False
+    if len == 1:
+        return True
+
+    odd = True if len % 2 == 1 else False
+    stack = list()
+    slow_runner = fast_runner = l.head
+
+    while fast_runner:
+        stack.append(slow_runner.data)
+        fast_runner = fast_runner.next
+        if fast_runner:   # forward 2-steps if possible
+            fast_runner = fast_runner.next
+        slow_runner = slow_runner.next
+
+    if odd:
+        stack.pop()
+
+    while slow_runner:
+        if slow_runner.data != stack.pop():
+            return False
+        slow_runner = slow_runner.next
+
+    return True
+
+
 class LinkedList(object):
     """implement a Linked List:
        push_back : O(1)
@@ -208,6 +243,14 @@ class LinkedList(object):
         del self.tail
         self.head, self.tail = None, None
         self.len = 0
+
+    def is_palindrome(self):
+        """
+        time:  O(n)
+        space: O(n)
+        use fast and flow runner to control flow
+        """
+        return is_palindrome(self)
 
     def __iter__(self):
         """ O(n) """

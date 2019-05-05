@@ -130,3 +130,18 @@ class TestLinkedList(object):
 
         actual = ll.get_kth_from_back(k)
         assert actual == expected
+
+    @pytest.mark.parametrize('datas, expected', [
+        pytest.param([1, 3, 5, 3, 1], True),
+        pytest.param([1, 3, 3, 1], True),
+        pytest.param([1], True),
+        pytest.param([1, 1], True),
+        pytest.param([1, 3, 5, 3, 0], False),
+        pytest.param([1, 3, 3, 0], False),
+        pytest.param([1, 0], False)
+    ])
+    def test_is_palindrome(self, datas, expected):
+        ll = LinkedList()
+        ll.push_back_bulk(datas)
+        actual = ll.is_palindrome()
+        assert actual is expected
