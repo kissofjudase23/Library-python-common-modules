@@ -193,6 +193,9 @@ class LinkedList(object):
                 prev = runner
                 runner = runner.next
 
+        if prev:
+            self.tail = prev
+
     def remove_duplicate(self):
         """ time:  O(n)
             space: O(n)
@@ -212,6 +215,9 @@ class LinkedList(object):
                 prev = cur
 
             cur = cur.next
+
+        if prev:
+            self.tail = prev
 
     def reverse(self):
         """ O(n) """
