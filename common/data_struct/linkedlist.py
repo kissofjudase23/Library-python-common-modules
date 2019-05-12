@@ -6,9 +6,9 @@ from ..exc import ArgError
 
 
 class Node(object):
-
     def __init__(self):
         self.data = None
+        self.prev = None
         self.next = None
 
 
@@ -246,48 +246,6 @@ def sum_forward_recursive(l1, l2):
 
 class LinkedListABC(ABC):
 
-    @property
-    @abstractmethod
-    def len(self):
-        raise NotImplementedError('please implemet len property')
-
-    @len.setter
-    @abstractmethod
-    def len(self, val):
-        raise NotImplementedError('please implemet len property')
-
-    @abstractmethod
-    def push_front(self, data):
-        raise NotImplementedError('please implemet this method')
-
-    @abstractmethod
-    def push_back(self, data):
-        raise NotImplementedError('please implemet this method')
-
-    @abstractmethod
-    def pop_front(self):
-        raise NotImplementedError('please implemet this method')
-
-    @abstractmethod
-    def pop_back(self):
-        raise NotImplementedError('please implemet this method')
-
-    @abstractmethod
-    def bulk_push_back(self, input_list):
-        raise NotImplementedError('please implemet this method')
-        
-    @abstractmethod
-    def bulk_push_front(self, input_list):
-        raise NotImplementedError('please implemet this method')
-
-
-class LinkedList(LinkedListABC):
-    """implement a Linked List:
-       push_back : O(1)
-       push_front: O(1)
-       remove    : O(n)
-    """
-
     def __init__(self):
         self._len = 0
         self.head = None
@@ -310,6 +268,59 @@ class LinkedList(LinkedListABC):
         """ O(n) """
         return not self.__eq__(other)
 
+    @property
+    def len(self):
+        return self._len
+
+    @len.setter
+    def len(self, val):
+        self._len = val
+
+    def bulk_push_back(self, input_list):
+        """ O(n) """
+        for i in input_list:
+            self.push_back(i)
+
+    def bulk_push_front(self, input_list):
+        """ O(n^2) """
+        for i in input_list:
+            self.push_front(i)
+
+    @abstractmethod
+    def push_front_by_node(self, new):
+        raise NotImplementedError('please implemet this method')
+
+    @abstractmethod
+    def push_back_by_node(self, new):
+        raise NotImplementedError('please implemet this method')
+
+    @abstractmethod
+    def push_front(self, data):
+        raise NotImplementedError('please implemet this method')
+
+    @abstractmethod
+    def push_back(self, data):
+        raise NotImplementedError('please implemet this method')
+
+    @abstractmethod
+    def pop_front(self):
+        raise NotImplementedError('please implemet this method')
+
+    @abstractmethod
+    def pop_back(self):
+        raise NotImplementedError('please implemet this method')
+
+
+class LinkedList(LinkedListABC):
+    """Singly Linked List
+       push_back : O(1)
+       push_front: O(1)
+       remove    : O(n)
+    """
+
+    def __init__(self):
+        super().__init__()
+
     def __repr__(self):
         """ O(n) """
         if self.len == 0:
@@ -323,19 +334,7 @@ class LinkedList(LinkedListABC):
 
         return '->'.join(d_list)
 
-    @property
-    def len(self):
-        return self._len
-
-    @len.setter
-    def len(self, val):
-        self._len = val
-
-    def push_front(self, data):
-        """ O(1) """
-        new = Node()
-        new.data = data
-
+    def push_front_by_node(self, new):
         if self.len == 0:
             self.head = self.tail = new
         else:
@@ -344,11 +343,7 @@ class LinkedList(LinkedListABC):
 
         self.len += 1
 
-    def push_back(self, data):
-        """ O(1) """
-        new = Node()
-        new.data = data
-
+    def push_back_by_node(self, new):
         if self.len == 0:
             self.head = self.tail = new
         else:
@@ -357,6 +352,18 @@ class LinkedList(LinkedListABC):
 
         self.len += 1
 
+    def push_front(self, data):
+        """ O(1) """
+        new = Node()
+        new.data = data
+        self.push_front_by_node(new)
+
+    def push_back(self, data):
+        """ O(1) """
+        new = Node()
+        new.data = data
+        self.push_back_by_node(new)
+
     def pop_front(self):
         """ O(1) """
         if self.len == 0:
@@ -364,7 +371,7 @@ class LinkedList(LinkedListABC):
 
         ret_d = self.head.data
         if self.len == 1:
-            self.head, self.tail = None, None
+            self.head = self.tail = None
         else:  # >=2
             self.head = self.head.next
 
@@ -392,16 +399,6 @@ class LinkedList(LinkedListABC):
                 return ret_d
             else:
                 runner = runner.next
-
-    def bulk_push_back(self, input_list):
-        """ O(n) """
-        for i in input_list:
-            self.push_back(i)
-
-    def bulk_push_front(self, input_list):
-        """ O(n^2) """
-        for i in input_list:
-            self.push_front(i)
 
     def remove(self, target):
         """ O(n) """
@@ -737,6 +734,91 @@ class LinkedList(LinkedListABC):
         1->2->3->1->2->3 .... infinite loop
         """
         self.tail.next = self.head
+
+
+class DLinkedListABC(LinkedListABC):
+    """ Doubly Linked List
+    """
+
+    def __init__(self):
+        super().__init__()
+
+    def __repr__(self):
+        """ O(n) """
+        if self.len == 0:
+            return ''
+
+        d_list = list()
+        runner = self.head
+        while runner:
+            d_list.append(str(runner.data))
+            runner = runner.next
+
+        return '<->'.join(d_list)
+
+    def push_front_by_node(self, new):
+        if self.len == 0:
+            self.head = self.tail = new
+        else:
+            self.head.prev = new
+            new.next = self.head
+            self.head = new
+
+        self.len += 1
+
+    def push_back_by_node(self, new):
+        if self.len == 0:
+            self.head = self.tail = new
+        else:
+            self.tail.next = new
+            new.prev = self.tail
+            self.tail = new
+
+        self.len += 1 
+
+    def push_front(self, data):
+        """O(1)"""
+        new = Node()
+        new.data = data
+
+        self.push_front_by_node(new)
+
+    def push_back(self, data):
+        """O(1)"""
+        new = Node()
+        new.data = data
+
+        self.push_back_by_node(new)
+
+    def pop_front(self):
+        """O(1)"""
+        if self.len == 0:
+            return None
+
+        ret_d = self.head.data
+        if self.len == 1:
+            self.head = self.tail = None
+        else:
+            self.head = self.head.next
+            self.head.prev = None
+   
+        self.len -= 1
+        return ret_d
+
+    def pop_back(self):
+        """O(1)"""
+        if self.len == 0:
+            return None
+      
+        ret_d = self.tail.data
+        if self.len == 1:
+            self.head = self.tail = None
+        else:
+            self.tail = self.tail.prev
+            self.tail.next = None
+
+        self.len -= 1
+        return ret_d
 
 
 def main():
