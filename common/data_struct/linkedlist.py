@@ -6,10 +6,10 @@ from ..exc import ArgError
 
 
 class Node(object):
-    def __init__(self):
-        self.data = None
-        self.prev = None
-        self.next = None
+    def __init__(self, data=None, prev=None, next=None):
+        self.data = data
+        self.prev = prev
+        self.next = next
 
 
 def is_equal(l1, l2):
@@ -736,7 +736,7 @@ class LinkedList(LinkedListABC):
         self.tail.next = self.head
 
 
-class DLinkedListABC(LinkedListABC):
+class DLinkedList(LinkedListABC):
     """ Doubly Linked List
     """
 
@@ -773,8 +773,7 @@ class DLinkedListABC(LinkedListABC):
             self.tail.next = new
             new.prev = self.tail
             self.tail = new
-
-        self.len += 1 
+        self.len += 1
 
     def push_front(self, data):
         """O(1)"""
@@ -801,7 +800,7 @@ class DLinkedListABC(LinkedListABC):
         else:
             self.head = self.head.next
             self.head.prev = None
-   
+
         self.len -= 1
         return ret_d
 
@@ -809,7 +808,7 @@ class DLinkedListABC(LinkedListABC):
         """O(1)"""
         if self.len == 0:
             return None
-      
+
         ret_d = self.tail.data
         if self.len == 1:
             self.head = self.tail = None
@@ -820,18 +819,30 @@ class DLinkedListABC(LinkedListABC):
         self.len -= 1
         return ret_d
 
+    def revmoe_node(self, remove_node):
+        """
+        The node should be in the list
+        """
+        if remove_node.prev:
+            remove_node.prev.next = remove_node.next
+        else:
+            # remove_node is head node
+            self.head = remove_node.next
+
+        if remove_node.next:
+            remove_node.next.prev = remove_node.prev
+        else:
+            # remove_node is tail node
+            self.tail = remove_node.prev
+
+        self.len -= 1
+
 
 def main():
-    l1 = LinkedList()
-    l1.bulk_push_back([1, 2, 3])
-
-    l2 = LinkedList()
-    l2.bulk_push_back([100, 200, 300])
-
-    l1.tail.next = l2.head
-    l2.make_circular()
-
-    print(find_loop_beginning(l1))
+    dll = DLinkedList()
+    nodes = [Node(0), Node(1), Node(2)]
+    for node in nodes:
+        dll.push_back_by_node(node)
 
 if __name__ == "__main__":
     sys.exit(main())

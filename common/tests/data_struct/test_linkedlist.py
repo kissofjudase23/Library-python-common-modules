@@ -1,6 +1,6 @@
 import pytest
 
-from ...data_struct.linkedlist import LinkedList
+from ...data_struct.linkedlist import LinkedList, DLinkedList, Node
 from ...exc import ArgError
 
 from ...data_struct import linkedlist as linkedlist
@@ -280,11 +280,83 @@ class TestLinkedList(object):
         pytest.param([1, 2, 3, 4, 5, 6, 7, 8], [100], 100),
     ])
     def find_loop_beginning(self, data1, data2, expected):
-            l1 = LinkedList()
-            l1.bulk_push_back(data1)
-            l2 = LinkedList()
-            l2.bulk_push_back(data2)
-            l1.tail.next = l2.head
-            l2.make_circular()
-            actual = linkedlist.find_loop_beginning(l1)
-            assert actual is expected
+        l1 = LinkedList()
+        l1.bulk_push_back(data1)
+        l2 = LinkedList()
+        l2.bulk_push_back(data2)
+        l1.tail.next = l2.head
+        l2.make_circular()
+        actual = linkedlist.find_loop_beginning(l1)
+        assert actual is expected
+
+
+class TestDoublyLinkedList(object):
+    @pytest.mark.parametrize('datas, expected', [
+        pytest.param([1], "1"),
+        pytest.param([1, 2], "1<->2"),
+        pytest.param([1, 2, 3, 4, 5], "1<->2<->3<->4<->5"),
+    ])
+    def test_push_back(self, datas, expected):
+        dll = DLinkedList()
+        dll.bulk_push_back(datas)
+        assert dll.__repr__() == expected
+
+    @pytest.mark.parametrize('datas, expected', [
+        pytest.param([1], "1"),
+        pytest.param([1, 2], "2<->1"),
+        pytest.param([1, 2, 3, 4, 5], "5<->4<->3<->2<->1"),
+    ])
+    def test_push_front(self, datas, expected):
+        dll = DLinkedList()
+        dll.bulk_push_front(datas)
+        assert dll.__repr__() == expected
+
+    @pytest.mark.parametrize('datas, pop_cnt, expected', [
+        pytest.param([1], 1, ""),
+        pytest.param([1, 2, 3, 4, 5], 1, "1<->2<->3<->4"),
+        pytest.param([1, 2, 3, 4, 5], 3, "1<->2"),
+        pytest.param([1, 2, 3, 4, 5], 4, "1"),
+        pytest.param([1, 2, 3, 4, 5], 5, ""),
+    ])
+    def test_pop_back(self, datas, pop_cnt, expected):
+        dll = DLinkedList()
+        dll.bulk_push_back(datas)
+
+        for _ in range(pop_cnt):
+            dll.pop_back()
+
+        assert dll.__repr__() == expected
+
+    @pytest.mark.parametrize('datas, pop_cnt, expected', [
+        pytest.param([1], 1, ""),
+        pytest.param([1, 2, 3, 4, 5], 1, "2<->3<->4<->5"),
+        pytest.param([1, 2, 3, 4, 5], 3, "4<->5"),
+        pytest.param([1, 2, 3, 4, 5], 4, "5"),
+        pytest.param([1, 2, 3, 4, 5], 5, ""),
+    ])
+    def test_pop_front(self, datas, pop_cnt, expected):
+        dll = DLinkedList()
+        dll.bulk_push_back(datas)
+
+        for _ in range(pop_cnt):
+            dll.pop_front()
+
+        assert dll.__repr__() == expected
+
+    def test_remove_nodes(self):
+        dll = DLinkedList()
+
+        nodes = [Node(0), Node(1), Node(2)]
+
+        for node in nodes:
+            dll.push_back_by_node(node)
+        assert dll.__repr__() == "0<->1<->2"
+
+        dll.revmoe_node(nodes[1])  # remove Node(1)
+        assert dll.__repr__() == "0<->2"
+
+        dll.revmoe_node(nodes[0])  # remove Node(0)
+        assert dll.__repr__() == "2"
+
+        dll.revmoe_node(nodes[2])  # remove Node(2)
+        assert dll.__repr__() == ""
