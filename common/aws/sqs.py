@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import hashlib
@@ -10,22 +9,12 @@ from botocore.config import Config
 from ..exc import SendMsgError, DelMsgError, ReceiveMsgError, NoMatchQueueError
 
 
-class SQSUtility(object):
+class Utils(object):
     """
     Please refer
     http://boto3.readthedocs.io/en/latest/reference/services/sqs.html
     for detail
     """
-
-    instance = None
-
-    @classmethod
-    def get_instance(cls, logger, max_retry=3):
-        if not cls.instance:
-            cls.instance = SQSUtility(logger, max_retry)
-
-        return cls.instance
-
     def __init__(self, logger, max_retry=3):
 
         retry_config = Config(
@@ -72,11 +61,12 @@ class SQSUtility(object):
             self.sqs.delete_message(QueueUrl=queue_url,
                                     ReceiptHandle=receipt_handle)
         except ClientError as e:
-            raise DelMsgError(f'Delete Message err, err:{e}')
+            raise DelMsgError(f'Delete Message err, err:{e}') from e
 
     def receive_message(self,
                         queue_url,
-                        max_num_msg=1, wait_time_secs=0):
+                        max_num_msg=1,
+                        wait_time_secs=0):
         """
         param:
             queue_url: url of queue
@@ -134,8 +124,7 @@ class SQSUtility(object):
 
             # An MD5 digest of the non-URL-encoded message attribute string.
             if 'MD5OfMessageBody' not in res:
-                self.logger.warn("Does not receive MD5OfMessageBody, msg_body="
-                                 .format(msg_body))
+                self.logger.warn(f'Does not receive MD5OfMessageBody, msg_body={msg_body}')
                 raise SendMsgError('Does not receive MD5OfMessageBody')
 
             res_md5_of_msg_body = res['MD5OfMessageBody']

@@ -1,42 +1,54 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 
-class BaseError(ValueError):
+# Module Base Error
+class ModuleError(ValueError):
     pass
 
 
-class ArgError(BaseError):
+class ArgError(ModuleError):
     pass
 
 
-class AwsBaseError(BaseError):
+# AWS Error
+class AwsError(ModuleError):
     pass
 
 
-class SQSBaseError(AwsBaseError):
+# SQS Error
+class SQSError(AwsError):
     pass
 
 
-class SendMsgError(SQSBaseError):
+class SendMsgError(SQSError):
     pass
 
 
-class DelMsgError(SQSBaseError):
+class DelMsgError(SQSError):
     pass
 
 
-class ReceiveMsgError(SQSBaseError):
+class ReceiveMsgError(SQSError):
     pass
 
 
-class NoMatchQueueError(SQSBaseError):
+class NoMatchQueueError(SQSError):
     pass
 
 
-class FileBaseError(BaseError):
+# SSM Error
+class SSMError(AwsError):
     pass
 
-class HDFSError(FileBaseError):
+
+class SSMListParameterError(SSMError):
     pass
 
+
+# File Error
+class FileError(ModuleError):
+    pass
+
+
+class HDFSError(FileError):
+    pass

@@ -1,27 +1,18 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import boto3
 from botocore.config import Config
 from botocore.exceptions import ClientError
 
+from ..exc import SSMListParameterError
 
-class SSMUtility(object):
+
+class Utils(object):
     """
     Please refer
     https://boto3.readthedocs.io/en/latest/reference/services/ssm.html#SSM.Client.get_parameters
     for detail
     """
-
-    instance = None
-
-    @classmethod
-    def get_instance(cls, logger, max_retry=3):
-        if not cls.instance:
-            cls.instance = SSMUtility(logger, max_retry)
-
-        return cls.instance
-
     def __init__(self, logger, max_retry=3):
 
         retry_config = Config(
@@ -43,12 +34,11 @@ class SSMUtility(object):
         try:
             res = self.ssm.get_parameters(Names=parameter_list,
                                           WithDecryption=with_decryption)
-
             return res['Parameters']
 
         except ClientError as e:
             self.logger.error(e)
-            raise e
+            raise SSMListParameterError(f'list parameter for {parameter_list} failed') from e
 
 
 if __name__ == '__main__':
