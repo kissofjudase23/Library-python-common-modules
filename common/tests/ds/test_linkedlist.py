@@ -1,9 +1,9 @@
 import pytest
 
-from ...data_struct.linkedlist import LinkedList, DLinkedList, Node
+from ...ds.linkedlist import LinkedList, DLinkedList, Node
 from ...exc import ArgError
 
-from ...data_struct import linkedlist as linkedlist
+from ...ds import linkedlist as linkedlist
 
 
 class TestLinkedList(object):
