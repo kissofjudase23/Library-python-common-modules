@@ -8,7 +8,7 @@ from botocore.exceptions import ClientError
 from botocore.config import Config
 
 from ..exc import GetVersionIDError, CopyObjectError, PutObjectError, UploadFileError,\
-                DownloadFileError, DownloadFileError, ListObjectError
+                DownloadFileError, DownloadFileError, ListObjectError, DeleteObjectError
 
 
 class S3Wrapper(object):
@@ -234,13 +234,17 @@ class S3Wrapper(object):
             if not batch_objs:
                 continue
 
-            self.s3.delete_objects(
-                Bucket=bucket,
-                Delete={
-                    'Objects': batch_objs
-                }
-            )
-
+            try:
+                self.s3.delete_objects(
+                    Bucket=bucket,
+                    Delete={
+                        'Objects': batch_objs
+                    }
+                )
+            except ClientError as e:
+                raise DeleteObjectError(f'delete objects failed, bucket:{bucket}, '
+                                        f'prefix:{prefix}, start_after:{start_after},'
+                                        f'err:{e}') from e
 
 def main():
     pass

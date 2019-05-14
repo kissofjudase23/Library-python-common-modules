@@ -73,6 +73,9 @@ class ListObjectError(S3Error):
     pass
 
 
+class DeleteObjectError(S3Error):
+    pass
+
 # File Error
 class FileError(ModuleError):
     pass
