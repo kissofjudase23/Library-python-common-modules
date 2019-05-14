@@ -9,7 +9,7 @@ from botocore.config import Config
 from ..exc import SendMsgError, DelMsgError, ReceiveMsgError, NoMatchQueueError
 
 
-class Utils(object):
+class SQSWrapper(object):
     """
     Please refer
     http://boto3.readthedocs.io/en/latest/reference/services/sqs.html

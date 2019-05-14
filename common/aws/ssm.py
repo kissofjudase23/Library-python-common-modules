@@ -7,7 +7,7 @@ from botocore.exceptions import ClientError
 from ..exc import SSMListParameterError
 
 
-class Utils(object):
+class SSMWrapper(object):
     """
     Please refer
     https://boto3.readthedocs.io/en/latest/reference/services/ssm.html#SSM.Client.get_parameters
