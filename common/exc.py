@@ -45,6 +45,34 @@ class SSMListParameterError(SSMError):
     pass
 
 
+class S3Error(AwsError):
+    pass
+
+
+class GetVersionIDError(S3Error):
+    pass
+
+
+class CopyObjectError(S3Error):
+    pass
+
+
+class PutObjectError(S3Error):
+    pass
+
+
+class UploadFileError(S3Error):
+    pass
+
+
+class DownloadFileError(S3Error):
+    pass
+
+
+class ListObjectError(S3Error):
+    pass
+
+
 # File Error
 class FileError(ModuleError):
     pass
