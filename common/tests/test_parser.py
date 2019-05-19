@@ -3,7 +3,7 @@
 import pytest
 
 from ..parser.parser import EmailParser, Tokenizer
-from ..parser.exc import ParseError, TokenizeError
+from ..exc import ParseError, TokenizeError
 
 
 class TestEmailParser(object):

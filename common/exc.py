@@ -83,3 +83,11 @@ class FileError(ModuleError):
 
 class HDFSError(FileError):
     pass
+
+
+class ParseError(ModuleError):
+    pass
+
+
+class TokenizeError(ModuleError):
+    pass

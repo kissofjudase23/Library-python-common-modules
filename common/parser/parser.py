@@ -2,7 +2,7 @@ import re
 
 import nltk
 
-from .exc import ParseError, TokenizeError
+from ..exc import ParseError, TokenizeError
 
 
 class EmailParser(object):
