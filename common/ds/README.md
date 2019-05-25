@@ -10,6 +10,7 @@
 - [Queue](#queue)
 - [Cache](#cache)
   - [LRU](#lru-cache)
+- [Tree](#tree)
 
 
 ## Linked List
@@ -55,3 +56,22 @@
     |            | Set  | Get  | Delete |
     |------------|------|------|--------|
     | LRU Cache  | O(1) | O(1) | O(1)   |
+
+## Tree
+- Average
+
+    |                    | Access     | Search     | Insertion  | Deletion   |
+    |--------------------|------------|------------|------------|------------|
+    | Binary Search Tree | O(long(n)) | O(long(n)) | O(long(n)) | O(long(n)) |
+    | AVL Tree           | O(long(n)) | O(long(n)) | O(long(n)) | O(long(n)) |
+    | B Tree             | O(long(n)) | O(long(n)) | O(long(n)) | O(long(n)) |
+    | Red-Black Tree     | O(long(n)) | O(long(n)) | O(long(n)) | O(long(n)) |
+
+- Worst
+
+    |                    | Access     | Search     | Insertion  | Deletion   |
+    |--------------------|------------|------------|------------|------------|
+    | Binary Search Tree | O(n)       | O(n)       | O(n)       | O(n)       |
+    | AVL Tree           | O(long(n)) | O(long(n)) | O(long(n)) | O(long(n)) |
+    | B Tree             | O(long(n)) | O(long(n)) | O(long(n)) | O(long(n)) |
+    | Red-Black Tree     | O(long(n)) | O(long(n)) | O(long(n)) | O(long(n)) |
