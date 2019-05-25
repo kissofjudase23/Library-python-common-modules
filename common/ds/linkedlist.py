@@ -260,9 +260,9 @@ class LinkedListABC(ABC):
 
     def __eq__(self, other):
         """ O(n) """
-        if isinstance(other, LinkedList):
-            return is_equal(self, other)
-        return False
+        if not self.__class__.__name__ == other.__class__.__name__:
+            return False
+        return is_equal(self, other)
 
     def __ne__(self, other):
         """ O(n) """
