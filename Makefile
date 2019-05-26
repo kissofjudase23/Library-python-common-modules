@@ -1,5 +1,5 @@
 
-SERVICE_NAME ?= "library-python-common-modules"
+SERVICE_NAME ?= "common"
 
 all:
 	@run_test

@@ -1,6 +1,7 @@
 FROM ubuntu:18.04
 
-MAINTAINER kissofjudase23@gmail.com
+LABEL "maintainer"="kissofjudase23@gmail.com" \
+      "type"="library"
 
 RUN apt-get -y update && \
     apt-get -y install python3.6 python3-pip && \
