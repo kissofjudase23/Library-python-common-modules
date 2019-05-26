@@ -20,7 +20,7 @@ up:
 	docker-compose up -d --build
 
 attach:
-	docker exec -it $(SERVICE_NAME) make /bin/bash
+	docker exec -it $(SERVICE_NAME) /bin/bash
 
 down:
 	docker-compose down
