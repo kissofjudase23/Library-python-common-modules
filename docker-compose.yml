@@ -1,6 +1,30 @@
-version: "3.6"
+version: "3.7"
+
 services:
+  db:
+    image: mysql
+    container_name: mysql_common
+    restart: "no"
+    networks:
+      - common_net
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+
+  redis:
+    image: redis
+    container_name: redis_common
+    restart: "no"
+    networks:
+      - common_net
+    ports:
+      - 6379:6379
+    
   common:
+    depends_on:
+      - db
+      - redis
     build:
       context: ./
       dockerfile: dockerfile
@@ -8,8 +32,17 @@ services:
         work_dir: /tmp/common
     image: common:develop
     container_name: common
+    restart: "no"
+    networks:
+      - common_net
     volumes:
       - type: bind
         source: ./
         target: /tmp/common
     tty: true
+
+  
+networks:
+  common_net:
+    driver: bridge
+    name: "common_net"
