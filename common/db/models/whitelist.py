@@ -10,7 +10,7 @@ import sqlalchemy.orm.exc as orm_exc
 from sqlalchemy.orm import validates
 
 from .model_base import ModelUtils
-from ...common import Utils
+from ...compare import Utils
 from ..database import MYSQL_ENGINE, MYSQL_CHARSET, MYSQL_COLLATE
 from ..database import BASE, transaction_context
 from ..exc import KeyNotFound, DuplicateKey, InvalidCategory, InvalidStatus, ErrorTestCase
@@ -80,8 +80,9 @@ class WhiteList(BASE, ModelUtils):
                               onupdate=func.now(),
                               nullable=False)
 
-    category = Column(SMALLINT(unsigned=True), nullable=False, index=True)
-    status = Column(SMALLINT(unsigned=True), nullable=False, index=True)
+    # remove index in low cardinality fields (category, status)
+    category = Column(SMALLINT(unsigned=True), nullable=False)
+    status = Column(SMALLINT(unsigned=True), nullable=False)
 
     data = Column(VARCHAR(length=2048), nullable=False)
     test_case = Column(VARCHAR(length=2048), nullable=False)
@@ -297,6 +298,7 @@ class WhiteListUtility(metaclass=ABCMeta):
             session.delete(record)
 
         return record_id
+
 
 # TODO, use metaclass
 class WhiteListFromUtility(WhiteListUtility):
