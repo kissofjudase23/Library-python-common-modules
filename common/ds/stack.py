@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 
 
 class Node(object):
-    def __init__(self, data=None, next=None):
+    def __init__(self, data=None, prev=None):
         self.data = data
-        self.prev = next
+        self.prev = prev
 
 
 def is_equal(s1, s2):
@@ -26,7 +26,7 @@ class StackABC(ABC):
 
     def __init__(self):
         self.top = None
-        self.len = 0
+        self._len = 0
 
     def __iter__(self):
         runner = self.top
@@ -38,7 +38,7 @@ class StackABC(ABC):
         if not self.__class__.__name__ == other.__class__.__name__:
             return False
         else:
-            return (self, other)
+            return is_equal(self, other)
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -53,8 +53,8 @@ class StackABC(ABC):
 
     def bulk_push(self, input_list):
         """ O(n) """
-        for i in input_list:
-            self.push(i)
+        for v in input_list:
+            self.push(v)
 
     @abstractmethod
     def push(self, val):
