@@ -6,10 +6,23 @@ from ..exc import ArgError
 
 
 class Node(object):
+
     def __init__(self, data=None, prev=None, next=None):
         self.data = data
         self.prev = prev
         self.next = next
+
+    def __repr__(self):
+        return str(self.data)
+
+
+class CacheNode(Node):
+    def __init__(self, key=None, data=None, prev=None, next=None):
+        super().__init__(data=data, prev=prev, next=next)
+        self.key = key
+
+    def __repr__(self):
+        return f'{self.key}:{self.data}'
 
 
 def is_equal(l1, l2):
@@ -329,7 +342,7 @@ class LinkedList(LinkedListABC):
         d_list = list()
         runner = self.head
         while runner:
-            d_list.append(str(runner.data))
+            d_list.append(runner.__repr__())
             runner = runner.next
 
         return '->'.join(d_list)
@@ -770,7 +783,7 @@ class DLinkedList(LinkedListABC):
         d_list = list()
         runner = self.head
         while runner:
-            d_list.append(str(runner.data))
+            d_list.append(runner.__repr__())
             runner = runner.next
 
         return '<->'.join(d_list)
@@ -800,24 +813,22 @@ class DLinkedList(LinkedListABC):
 
     def push_front(self, data):
         """O(1)"""
-        new = Node()
-        new.data = data
+        new = Node(data)
 
         return self.push_front_by_node(new)
 
     def push_back(self, data):
         """O(1)"""
-        new = Node()
-        new.data = data
+        new = Node(data)
 
         return self.push_back_by_node(new)
 
-    def pop_front(self):
+    def pop_front_node(self):
         """O(1)"""
         if self.len == 0:
             return None
 
-        ret_d = self.head.data
+        ret_n = self.head
         if self.len == 1:
             self.head = self.tail = None
         else:
@@ -825,14 +836,14 @@ class DLinkedList(LinkedListABC):
             self.head.prev = None
 
         self.len -= 1
-        return ret_d
+        return ret_n
 
-    def pop_back(self):
+    def pop_back_node(self):
         """O(1)"""
         if self.len == 0:
             return None
 
-        ret_d = self.tail.data
+        ret_n = self.tail
         if self.len == 1:
             self.head = self.tail = None
         else:
@@ -840,7 +851,20 @@ class DLinkedList(LinkedListABC):
             self.tail.next = None
 
         self.len -= 1
-        return ret_d
+        return ret_n
+
+    def pop_front(self):
+        ret_n = self.pop_front_node()
+        if not ret_n:
+            return None
+        return ret_n.data
+
+    def pop_back(self):
+        ret_n = self.pop_back_node()
+        if not ret_n:
+            return None
+
+        return ret_n.data
 
     def revmoe_node(self, remove_node):
         """
