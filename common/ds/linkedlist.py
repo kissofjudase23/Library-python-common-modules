@@ -609,6 +609,25 @@ class LinkedList(LinkedListABC):
 
         self.head, self.tail = self.tail, self.head
 
+    def reverse_recursive(self):
+
+        def _reverse_recursive(prev, cur):
+            if not cur:
+                self.head = prev
+                return
+
+            next_ = cur.next
+            cur.next = prev
+            _reverse_recursive(prev=cur, cur=next_)
+
+        if self.len < 1:
+            return
+
+        next_ = self.head.next
+        self.tail = self.head
+        self.head.next = None
+        _reverse_recursive(prev=self.head, cur=next_)
+
     def release(self):
         """ O(n) """
         runner = self.head
@@ -766,6 +785,8 @@ class DLinkedList(LinkedListABC):
 
         self.len += 1
 
+        return new
+
     def push_back_by_node(self, new):
         if self.len == 0:
             self.head = self.tail = new
@@ -775,19 +796,21 @@ class DLinkedList(LinkedListABC):
             self.tail = new
         self.len += 1
 
+        return new
+
     def push_front(self, data):
         """O(1)"""
         new = Node()
         new.data = data
 
-        self.push_front_by_node(new)
+        return self.push_front_by_node(new)
 
     def push_back(self, data):
         """O(1)"""
         new = Node()
         new.data = data
 
-        self.push_back_by_node(new)
+        return self.push_back_by_node(new)
 
     def pop_front(self):
         """O(1)"""
@@ -839,10 +862,13 @@ class DLinkedList(LinkedListABC):
 
 
 def main():
-    dll = DLinkedList()
-    nodes = [Node(0), Node(1), Node(2)]
-    for node in nodes:
-        dll.push_back_by_node(node)
+    datas = [1, 2, 3]
+    l2 = LinkedList()
+    l2.bulk_push_back(datas)
+    l2.reverse_recursive()
+
+    return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

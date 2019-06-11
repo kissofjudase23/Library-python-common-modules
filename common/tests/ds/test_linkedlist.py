@@ -93,6 +93,12 @@ class TestLinkedList(object):
 
         assert ll.__repr__() == expected
 
+        l2 = LinkedList()
+        l2.bulk_push_back(datas)
+        l2.reverse_recursive()
+
+        assert l2.__repr__() == expected
+
     @pytest.mark.parametrize('datas, expected', [
         pytest.param([1, 2, 3], "1->2->3"),
         pytest.param([1, 1], "1"),
