@@ -7,6 +7,9 @@ class Node(object):
         self.data = data
         self.prev = prev
 
+    def __repr__(self):
+        return str(self.data)
+
 
 def is_equal(s1, s2):
     """ O(n)
@@ -95,7 +98,7 @@ class Stack(StackABC):
         d_list = list()
         runner = self.top
         while runner:
-            d_list.append(str(runner.data))
+            d_list.append(runner.__repr__())
             runner = runner.prev
 
         return '->'.join(d_list)

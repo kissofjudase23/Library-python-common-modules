@@ -8,6 +8,9 @@ class Node(object):
         self.data = data
         self.next = next_
 
+    def __repr__(self):
+        return str(self.data)
+
 
 def is_equal(q1, q2):
 
@@ -107,7 +110,7 @@ class Queue(QueueABC):
         d_list = list()
         runner = self.head
         while runner:
-            d_list.append(str(runner.data))
+            d_list.append(runner.__repr__())
             runner = runner.next
 
         return '->'.join(d_list)
