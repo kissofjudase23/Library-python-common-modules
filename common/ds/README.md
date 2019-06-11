@@ -1,21 +1,22 @@
 # Data Structure
-
-## Reference
-- [Big-O Complexity Chart](http://bigocheatsheet.com/)
-
-## Table of Contents
+- [Reference](#reference)
 - [Linked List](#linked-list)
 - [Hash Table](#hash-table)
 - [Stack](#stack)
 - [Queue](#queue)
 - [Cache](#cache)
-  - [LRU](#lru-cache)
+  - [LRU Cache](#lru-cache)
 - [Tree](#tree)
 
+## Reference
+- [Big-O Complexity Chart](http://bigocheatsheet.com/)
 
-## Linked List
+
+
+
+## [Linked List](./linkedlist.py)
 - Average and Worst
-- 
+-
     |                              | Search | Push_front | Push_back | Remove Node |
     |------------------------------|--------|------------|-----------|-------------|
     | Singly Linked List with tail | O(n)   | O(1)       | O(1)      | O(n)        |
@@ -23,33 +24,33 @@
 
 ## Hash Table
 - Average
- 
+
     |            | Set  | Get  | Delete |
     |------------|------|------|--------|
     | Hash Table | O(1) | O(1) | O(1)   |
 
 - Worst
- 
+
     |            | Set  | Get  | Delete |
     |------------|------|------|--------|
     | Hash Table | O(n) | O(n) | O(n)   |
 
-## Stack
+## [Stack](./stack.py)
 - Average and Worst
 
     |       | Push | Pop  | Search|
     |-------|------|------|-------|
-    | Stack | O(1) | O(1) | O(n)  | 
+    | Stack | O(1) | O(1) | O(n)  |
 
-## Queue
+## [Queue](./queue.py)
 - Average and Worst
- 
-    |       | Add  | Pop  | Search|
-    |-------|------|------|-------|
-    | Queue | O(1) | O(1) | O(n)  | 
+
+    |       | Add  | Remove  | Search|
+    |-------|------|---------|-------|
+    | Queue | O(1) | O(1)    | O(n)  |
 
 
-## Cache
+## [Cache](./cache.py)
 ### LRU Cache
 - Doubly Linked List + Hash Table
 
