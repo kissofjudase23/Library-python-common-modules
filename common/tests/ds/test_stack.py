@@ -14,8 +14,7 @@ class TestStack(object):
         s = Stack()
         s.bulk_push(datas)
 
-        assert s.__repr__() == expected
-
+        assert repr(s) == expected
 
     @pytest.mark.parametrize('datas, pop_num, expected', [
         pytest.param([1], 0, "1"),
@@ -32,5 +31,4 @@ class TestStack(object):
         for _ in range(pop_num):
             s.pop()
 
-        assert s.__repr__() == expected
-
+        assert repr(s) == expected

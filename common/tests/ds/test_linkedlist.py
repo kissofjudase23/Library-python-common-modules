@@ -16,7 +16,7 @@ class TestLinkedList(object):
     def test_push_back(self, datas, expected):
         ll = LinkedList()
         ll.bulk_push_back(datas)
-        assert ll.__repr__() == expected
+        assert repr(ll) == expected
 
     @pytest.mark.parametrize('datas, expected', [
         pytest.param([1], "1"),
@@ -26,7 +26,7 @@ class TestLinkedList(object):
     def test_push_front(self, datas, expected):
         ll = LinkedList()
         ll.bulk_push_front(datas)
-        assert ll.__repr__() == expected
+        assert repr(ll) == expected
 
     @pytest.mark.parametrize('datas, pop_num, expected', [
         pytest.param([1, 2, 3, 4, 5], 2, "3->4->5"),
@@ -41,7 +41,7 @@ class TestLinkedList(object):
         for _ in range(pop_num):
             ll.pop_front()
 
-        assert ll.__repr__() == expected
+        assert repr(ll) == expected
 
     @pytest.mark.parametrize('datas, pop_num, expected', [
         pytest.param([1, 2, 3, 4, 5], 2, "1->2->3"),
@@ -56,7 +56,7 @@ class TestLinkedList(object):
         for _ in range(pop_num):
             ll.pop_back()
 
-        assert ll.__repr__() == expected
+        assert repr(ll) == expected
 
     @pytest.mark.parametrize('datas1, datas2', [
         pytest.param([1, 2, 3], [1, 2, 3]),
@@ -87,17 +87,17 @@ class TestLinkedList(object):
         pytest.param([1, 2, 3, 4, 5, 6], "6->5->4->3->2->1"),
     ])
     def test_reverse(self, datas, expected):
-        ll = LinkedList()
-        ll.bulk_push_back(datas)
-        ll.reverse()
+        l1 = LinkedList()
+        l1.bulk_push_back(datas)
+        l1.reverse()
 
-        assert ll.__repr__() == expected
+        assert repr(l1) == expected
 
         l2 = LinkedList()
         l2.bulk_push_back(datas)
         l2.reverse_recursive()
 
-        assert l2.__repr__() == expected
+        assert repr(l2) == expected
 
     @pytest.mark.parametrize('datas, expected', [
         pytest.param([1, 2, 3], "1->2->3"),
@@ -112,12 +112,12 @@ class TestLinkedList(object):
         l1 = LinkedList()
         l1.bulk_push_back(datas)
         l1.remove_duplicate()
-        assert l1.__repr__() == expected
+        assert repr(l1) == expected
 
         l2 = LinkedList()
         l2.bulk_push_back(datas)
         l2.remove_duplicate_space_optimize()
-        assert l2.__repr__() == expected
+        assert repr(l2) == expected
 
     @pytest.mark.parametrize('datas, k, expected', [
         pytest.param([1, 3, 5, 7, 9], 1, 1),
@@ -174,7 +174,7 @@ class TestLinkedList(object):
         ll = LinkedList()
         ll.bulk_push_back(datas)
         ll.switch_nodes()
-        assert ll.__repr__() == expected
+        assert repr(ll) == expected
 
     @pytest.mark.parametrize('datas, expected', [
         pytest.param([1], "1"),
@@ -185,7 +185,7 @@ class TestLinkedList(object):
         ll = LinkedList()
         ll.bulk_push_back(datas)
         ll.remove_middle()
-        assert ll.__repr__() == expected
+        assert repr(ll) == expected
 
     @pytest.mark.parametrize('datas, pivot, expected', [
         pytest.param([1, 3, 5], 5, "1->3->5"),
@@ -197,7 +197,7 @@ class TestLinkedList(object):
         ll = LinkedList()
         ll.bulk_push_back(datas)
         ll.partition_stable(pivot)
-        assert ll.__repr__() == expected
+        assert repr(ll) == expected
 
     @pytest.mark.parametrize('datas, pivot, expected', [
         pytest.param([1, 3, 5], 5, "3->1->5"),
@@ -209,7 +209,7 @@ class TestLinkedList(object):
         ll = LinkedList()
         ll.bulk_push_back(datas)
         ll.partition_non_stable(pivot)
-        assert ll.__repr__() == expected
+        assert repr(ll) == expected
 
     @pytest.mark.parametrize('data1, data2, expected', [
         pytest.param([7, 1, 6], [5, 9, 2], 912),
@@ -305,7 +305,7 @@ class TestDoublyLinkedList(object):
     def test_push_back(self, datas, expected):
         dll = DLinkedList()
         dll.bulk_push_back(datas)
-        assert dll.__repr__() == expected
+        assert repr(dll) == expected
 
     @pytest.mark.parametrize('datas, expected', [
         pytest.param([1], "1"),
@@ -315,7 +315,7 @@ class TestDoublyLinkedList(object):
     def test_push_front(self, datas, expected):
         dll = DLinkedList()
         dll.bulk_push_front(datas)
-        assert dll.__repr__() == expected
+        assert repr(dll) == expected
 
     @pytest.mark.parametrize('datas, pop_cnt, expected', [
         pytest.param([1], 1, ""),
@@ -331,7 +331,7 @@ class TestDoublyLinkedList(object):
         for _ in range(pop_cnt):
             dll.pop_back()
 
-        assert dll.__repr__() == expected
+        assert repr(dll) == expected
 
     @pytest.mark.parametrize('datas, pop_cnt, expected', [
         pytest.param([1], 1, ""),
@@ -347,7 +347,7 @@ class TestDoublyLinkedList(object):
         for _ in range(pop_cnt):
             dll.pop_front()
 
-        assert dll.__repr__() == expected
+        assert repr(dll) == expected
 
     def test_remove_nodes(self):
         dll = DLinkedList()
@@ -356,13 +356,13 @@ class TestDoublyLinkedList(object):
 
         for node in nodes:
             dll.push_back_by_node(node)
-        assert dll.__repr__() == "0<->1<->2"
+        assert repr(dll) == "0<->1<->2"
 
         dll.revmoe_node(nodes[1])  # remove Node(1)
-        assert dll.__repr__() == "0<->2"
+        assert repr(dll) == "0<->2"
 
         dll.revmoe_node(nodes[0])  # remove Node(0)
-        assert dll.__repr__() == "2"
+        assert repr(dll) == "2"
 
         dll.revmoe_node(nodes[2])  # remove Node(2)
-        assert dll.__repr__() == ""
+        assert repr(dll) == ""

@@ -13,8 +13,7 @@ class TestQueue(object):
     def test_add(self, datas, expected):
         q = Queue()
         q.bulk_add(datas)
-        assert q.__repr__() == expected
-
+        assert repr(q) == expected
 
     @pytest.mark.parametrize('datas, remove_num, expected', [
         pytest.param([1], 0, "1"),
@@ -31,4 +30,4 @@ class TestQueue(object):
         for _ in range(remove_num):
             q.remove()
 
-        assert q.__repr__() == expected
+        assert repr(q) == expected

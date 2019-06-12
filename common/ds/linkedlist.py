@@ -342,7 +342,7 @@ class LinkedList(LinkedListABC):
         d_list = list()
         runner = self.head
         while runner:
-            d_list.append(runner.__repr__())
+            d_list.append(repr(runner))
             runner = runner.next
 
         return '->'.join(d_list)
@@ -783,7 +783,7 @@ class DLinkedList(LinkedListABC):
         d_list = list()
         runner = self.head
         while runner:
-            d_list.append(runner.__repr__())
+            d_list.append(repr(runner))
             runner = runner.next
 
         return '<->'.join(d_list)
