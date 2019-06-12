@@ -7,15 +7,11 @@ from .linkedlist import DLinkedList, CacheNode
 class CacheABC(ABC):
 
     def __init__(self, cap):
-        self._cap = _cap
+        self._cap = cap
 
     @property
-    def capacity(self):
+    def cap(self):
         return self._cap
-
-    @capacity.setter
-    def capacity(self, val):
-        self._cap = val
 
     @property
     @abstractmethod
@@ -46,8 +42,8 @@ class LRUCache(CacheABC):
         Doubly linked list can provide O(1) remove operation
     """
 
-    def __init__(self, size):
-        super().__init__(size)
+    def __init__(self, cap):
+        super().__init__(cap)
         self.map = dict()
         self.d_linked_list = DLinkedList()
 
@@ -62,7 +58,7 @@ class LRUCache(CacheABC):
             return
 
         # remove the last node
-        if self.len == self.capacity:
+        if self.d_linked_list.len == self.cap:
             removed_node = self.d_linked_list.pop_back_node()
             self.map.pop(removed_node.key)
 
@@ -81,6 +77,8 @@ class LRUCache(CacheABC):
         self.d_linked_list.revmoe_node(node)
         self.d_linked_list.push_front_by_node(node)
 
+        return node.data
+
     def delete(self, key):
 
         if key not in self.map:
@@ -91,4 +89,17 @@ class LRUCache(CacheABC):
         self.map.pop(key)
 
     def __repr__(self):
-        return self.d_linked_list.__repr__()
+        return repr(self.d_linked_list)
+
+
+def main():
+    cache = LRUCache(3)
+    d = {"a": 100, "b": 200, "c": 300}
+    for k, v in d.items():
+        cache.set(k, v)
+    print(cache)
+    print(cache.len)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
