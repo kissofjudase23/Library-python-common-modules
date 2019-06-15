@@ -3,13 +3,14 @@ import sys
 
 def binary_search(l, target):
     """
-    Time  Complexity: O(logn)
+    Time  Complexity: O(log(n)), total log(n) round, each round takes O(1)
     Sapce Complexity: O(1)
     return -1 if not found
     """
 
     start, end = 0, len(l) - 1
 
+    # len is approxmiately equal to 1, n/2^k = 1, k = log(n)
     while start <= end:
         mid = (start + end)//2
         if target == l[mid]:
@@ -24,11 +25,14 @@ def binary_search(l, target):
 
 def binary_search_recursive(l, target):
     """
-    Time  Complexity: O(logn)
-    Sapce Complexity: O(logn)
+    Time  Complexity: O(log(n)), T(n) = T(n/2) + 1
+    Sapce Complexity: O(log(n))
     return -1 if not found
     """
     def _binary_search_recursive(l, start, end, target):
+        """
+        In order to reuse the same list, we need list pointers start, end
+        """
 
         # out of range
         if start > end:

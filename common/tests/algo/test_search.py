@@ -1,7 +1,6 @@
 import pytest
 
-from ...algo.search import binary_search, binary_search_recursive
-
+from ...algo import search
 
 
 @pytest.fixture(scope='class')
@@ -21,9 +20,8 @@ class TestBinarySearch(object):
         pytest.param(-100, -1),
     ])
     def test_fast(self, sorted_list, target, expected):
-        assert expected == binary_search(sorted_list, target)
-        assert expected == binary_search_recursive(sorted_list, target)
-
+        assert expected == search.binary_search(sorted_list, target)
+        assert expected == search.binary_search_recursive(sorted_list, target)
 
     @pytest.mark.parametrize('sorted_list, target, expected', [
         pytest.param([0], 0, 0),
@@ -31,5 +29,5 @@ class TestBinarySearch(object):
         pytest.param([0, 1], 1, 1),
     ])
     def test_toft(self, sorted_list, target, expected):
-        assert expected == binary_search(sorted_list, target)
-        assert expected == binary_search_recursive(sorted_list, target)
+        assert expected == search.binary_search(sorted_list, target)
+        assert expected == search.binary_search_recursive(sorted_list, target)
