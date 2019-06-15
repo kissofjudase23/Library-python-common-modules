@@ -1,4 +1,3 @@
-import math
 import sys
 
 
@@ -12,7 +11,7 @@ def binary_search(l, target):
     start, end = 0, len(l) - 1
 
     while start <= end:
-        mid = math.ceil((start + end)/2)
+        mid = (start + end)//2
         if target == l[mid]:
             return mid
         elif target < l[mid]:
@@ -35,7 +34,7 @@ def binary_search_recursive(l, target):
         if start > end:
             return -1
 
-        mid = math.ceil((start + end)/2)
+        mid = (start + end)//2
 
         if target == l[mid]:
             return mid
