@@ -91,7 +91,7 @@ def merge_sort_recursive(l):
     # use double slash for integer division
     mid = len(l)//2
 
-    print(f'l:{l}, mid:{mid}')
+    # print(f'l:{l}, mid:{mid}')
 
     # slice is a copy in python
     left = l[:mid]
@@ -111,7 +111,7 @@ def quick_sort_recursive(l):
         # use median of three to determine pivot can get rid of worst cases
         pivot = end
 
-        print(f'start:{start}, end:{end}, pivot:{pivot}, l[pivot]:{l[pivot]}, l:{l}')
+        # print(f'start:{start}, end:{end}, pivot:{pivot}, l[pivot]:{l[pivot]}, l:{l}')
 
         for runner in range(start, end):
             if l[runner] <= l[pivot]:
@@ -120,7 +120,7 @@ def quick_sort_recursive(l):
 
         l[border], l[pivot] = l[pivot], l[border]
 
-        print(f'border:{border}, l:{l}')
+        # print(f'border:{border}, l:{l}')
 
         return border
 
