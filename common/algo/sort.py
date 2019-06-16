@@ -45,7 +45,7 @@ def merge_sort(l):
         # windows_size:2, left:[0, 4, 8]
         # windows_size:4: left:[0, 8]
         left = 0
-        while left < len(l) - 1:
+        while (left + window_size) < len(l):
             """
             Python slice can help to handle out of range issues
             for example:
@@ -60,8 +60,9 @@ def merge_sort(l):
             right_window = l[mid:right]
             """
             mid = left + window_size
-            if mid > len(l):  # example: [9, 8, 7, 6, 5, 4, 3 ,2 ,1]
-                break
+            # move this check to while loop
+            # if mid > len(l):  # example: [9, 8, 7, 6, 5, 4, 3 ,2 ,1]
+            #    break
             right = mid + window_size
             if right > len(l):
                 right = len(l)
