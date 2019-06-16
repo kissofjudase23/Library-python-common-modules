@@ -1,9 +1,12 @@
 import sys
 
+
 def _merge_two_sorted_list(left, right, dst, *, dst_start=0):
 
     merge_runner = dst_start
     left_runner = right_runner = 0
+
+    # print(f'left:{left}, right:{right}')
 
     while left_runner < len(left) and right_runner < len(right):
         if left[left_runner] < right[right_runner]:
@@ -21,7 +24,7 @@ def _merge_two_sorted_list(left, right, dst, *, dst_start=0):
 
     while right_runner < len(right):
         dst[merge_runner] = right[right_runner]
-        left_runner += 1
+        right_runner += 1
         merge_runner += 1
 
 
@@ -88,6 +91,8 @@ def merge_sort_recursive(l):
     # use double slash for integer division
     mid = len(l)//2
 
+    print(f'l:{l}, mid:{mid}')
+
     # slice is a copy in python
     left = l[:mid]
     right = l[mid:]
@@ -99,8 +104,8 @@ def merge_sort_recursive(l):
 
 
 def main():
-    data = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
-    merge_sort(data)
+    data = [0, 1, 2]
+    merge_sort_recursive(data)
     print(data)
 
 

@@ -6,11 +6,22 @@ from ...algo import sort as SORT
 class TestMergeSort(object):
 
     @pytest.mark.parametrize('unsorted_list', [
+        pytest.param([]),
         pytest.param([1]),
-        pytest.param([3, 2, 1]),
-        pytest.param([5, 4, 3, 2, 1]),
-        pytest.param([6, 5, 4, 3, 2, 1]),
-        pytest.param([10, 9, 8, 7, 6, 5, 4, 3, 2, 1]),
+        pytest.param([1, 2]),
+        pytest.param([i for i in range(3, 0, -1)]),
+        pytest.param([i for i in range(4, 0, -1)]),
+        pytest.param([i for i in range(9, 0, -1)]),
+        pytest.param([i for i in range(10, 0, -1)]),
+        pytest.param([i for i in range(15, 0, -2)]),
+        pytest.param([i for i in range(16, 0, -2)]),
+        pytest.param([2, 1]),
+        pytest.param([i for i in range(0, 3)]),
+        pytest.param([i for i in range(0, 4)]),
+        pytest.param([i for i in range(0, 9)]),
+        pytest.param([i for i in range(0, 10)]),
+        pytest.param([i for i in range(0, 15, 2)]),
+        pytest.param([i for i in range(0, 16, 2)]),
     ])
     def test_fast(self, unsorted_list):
         expected = unsorted_list.copy()
