@@ -3,7 +3,7 @@ import pytest
 from ...algo import sort as SORT
 
 
-class TestMergeSort(object):
+class TestSorting(object):
 
     @pytest.mark.parametrize('unsorted_list', [
         pytest.param([]),
@@ -27,11 +27,15 @@ class TestMergeSort(object):
         expected = unsorted_list.copy()
         expected.sort()
 
-        actual1 = unsorted_list.copy()
-        actual2 = unsorted_list.copy()
+        merge_sort_actual = unsorted_list.copy()
+        merge_sort_recursive_actual = unsorted_list.copy()
+        quick_sort_recursive_actual = unsorted_list.copy()
 
-        SORT.merge_sort(actual1)
-        SORT.merge_sort_recursive(actual2)
+        SORT.merge_sort(merge_sort_actual)
+        assert expected == merge_sort_actual
 
-        assert expected == actual1
-        assert expected == actual2
+        SORT.merge_sort_recursive(merge_sort_recursive_actual)
+        assert expected == merge_sort_recursive_actual
+
+        SORT.quick_sort_recursive(quick_sort_recursive_actual)
+        assert expected == quick_sort_recursive_actual

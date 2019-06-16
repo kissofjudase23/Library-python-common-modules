@@ -103,6 +103,44 @@ def merge_sort_recursive(l):
     _merge_two_sorted_list(left=left, right=right, dst=l)
 
 
+def quick_sort_recursive(l):
+
+    def _get_partition(l, start, end):
+        border = start
+
+        # use median of three to determine pivot can get rid of worst cases
+        pivot = end
+
+        print(f'start:{start}, end:{end}, pivot:{pivot}, l[pivot]:{l[pivot]}, l:{l}')
+
+        for runner in range(start, end):
+            if l[runner] <= l[pivot]:
+                l[border], l[runner] = l[runner], l[border]
+                border += 1
+
+        l[border], l[pivot] = l[pivot], l[border]
+
+        print(f'border:{border}, l:{l}')
+
+        return border
+
+    def _quick_sort_recursive(l, start, end):
+
+        if start >= end:
+            return
+
+        pivot = _get_partition(l, start, end)
+        # left part
+        _quick_sort_recursive(l, start, pivot-1)
+        # right part
+        _quick_sort_recursive(l, pivot+1, end)
+
+    if len(l) <= 1:
+        return
+
+    _quick_sort_recursive(l=l, start=0, end=len(l) - 1)
+
+
 def main():
     data = [0, 1, 2]
     merge_sort_recursive(data)
