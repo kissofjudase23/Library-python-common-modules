@@ -1,4 +1,5 @@
 import sys
+import collections
 
 
 def _merge_two_sorted_list(left, right, dst, *, dst_start=0):
@@ -104,27 +105,71 @@ def merge_sort_recursive(l):
     _merge_two_sorted_list(left=left, right=right, dst=l)
 
 
+def _get_partition(l, start, end):
+    border = start
+
+    # use median of three to determine pivot can get rid of worst cases
+    pivot = end
+
+    # print(f'start:{start}, end:{end}, pivot:{pivot}, l[pivot]:{l[pivot]}, l:{l}')
+
+    # find the border
+    for runner in range(start, end):
+        if l[runner] <= l[pivot]:
+            l[border], l[runner] = l[runner], l[border]
+            border += 1
+
+    # switch the pivot to the border
+    l[border], l[pivot] = l[pivot], l[border]
+
+    # print(f'border:{border}, l:{l}')
+
+    return border
+
+
+def quick_sort(l):
+    """
+    Time Complexity: O(nlog(n))
+    Sapce Complexity: O(1)
+    Ref:
+    1. https://www.techiedelight.com/iterative-implementation-of-quicksort/
+    """
+
+    if len(l) <= 1:
+        return
+
+    start = 0
+    end = len(l) - 1
+    stack = list()
+
+    Pair = collections.namedtuple('Pair', ['start', 'end'])
+
+    # The first pirt
+    stack.append(Pair(start=start, end=end))
+
+    while len(stack):
+        pair = stack.pop()
+        start, end = pair.start, pair.end
+
+        pivot = _get_partition(l, start, end)
+
+        # left partition
+        if start < pivot:
+            stack.append(Pair(start=start, end=pivot-1))
+
+        # right partition
+        if end > pivot:
+            stack.append(Pair(start=pivot + 1, end=end))
+
+
 def quick_sort_recursive(l):
-
-    def _get_partition(l, start, end):
-        border = start
-
-        # use median of three to determine pivot can get rid of worst cases
-        pivot = end
-
-        # print(f'start:{start}, end:{end}, pivot:{pivot}, l[pivot]:{l[pivot]}, l:{l}')
-
-        for runner in range(start, end):
-            if l[runner] <= l[pivot]:
-                l[border], l[runner] = l[runner], l[border]
-                border += 1
-
-        l[border], l[pivot] = l[pivot], l[border]
-
-        # print(f'border:{border}, l:{l}')
-
-        return border
-
+    """
+    Time Complexity:  O(nlog(n))
+    Sapce Complexity: O(log(n)) ~ O(n)
+    Ref:
+    1. https://www.geeksforgeeks.org/python-program-for-quicksort/
+    2. https://www.youtube.com/watch?v=CB_NCoxzQnk
+    """
     def _quick_sort_recursive(l, start, end):
 
         if start >= end:
@@ -143,8 +188,8 @@ def quick_sort_recursive(l):
 
 
 def main():
-    data = [0, 1, 2]
-    merge_sort_recursive(data)
+    data = [2, 1, 0]
+    quick_sort(data)
     print(data)
 
 
