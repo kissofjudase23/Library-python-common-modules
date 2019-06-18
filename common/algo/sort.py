@@ -2,32 +2,35 @@ import sys
 import collections
 
 
-def _merge_two_sorted_list(left, right, dst, *, dst_start=0):
+def _merge_two_sorted_list(dst, *, dst_start,
+                           left_start, left_end,
+                           right_start, right_end):
+
+    left_window = dst[left_start:left_end + 1]        # start -> mid
+    right_window = dst[right_start:right_end + 1]     # mid + 1 -> end
 
     merge_runner = dst_start
     left_runner = right_runner = 0
 
-    # print(f'left:{left}, right:{right}')
-
-    while left_runner < len(left) and right_runner < len(right):
-        if left[left_runner] < right[right_runner]:
-            dst[merge_runner] = left[left_runner]
+    while left_runner < len(left_window) and right_runner < len(right_window):
+        if left_window[left_runner] <= right_window[right_runner]:
+            dst[merge_runner] = left_window[left_runner]
             left_runner += 1
         else:
-            dst[merge_runner] = right[right_runner]
+            dst[merge_runner] = right_window[right_runner]
             right_runner += 1
         merge_runner += 1
 
-    while left_runner < len(left):
-        dst[merge_runner] = left[left_runner]
+    while left_runner < len(left_window):
+        dst[merge_runner] = left_window[left_runner]
         left_runner += 1
         merge_runner += 1
 
-    while right_runner < len(right):
-        dst[merge_runner] = right[right_runner]
+    # do not need to traverse the rest end window, since it is already in dst
+    while right_runner < len(right_window):
+        dst[merge_runner] = right_window[right_runner]
         right_runner += 1
         merge_runner += 1
-
 
 def merge_sort(l):
     """
@@ -41,12 +44,12 @@ def merge_sort(l):
     window_size = 1
 
     # windows_size: [1, 2 ,4 ,8 ,16 ...] which means the sorted list unit
-    while window_size < len(l):
-        # windows_size:1, left:[0, 2, 4, 6, 8]
-        # windows_size:2, left:[0, 4, 8]
-        # windows_size:4: left:[0, 8]
-        left = 0
-        while (left + window_size) < len(l):
+    while window_size <= (len(l) - 1):
+        # windows_size:1, start:[0, 2, 4, 6, 8]
+        # windows_size:2, start:[0, 4, 8]
+        # windows_size:4: start:[0, 8]
+        start = 0
+        while (start + window_size) < len(l):
             """
             Python slice can help to handle out of range issues
             for example:
@@ -55,28 +58,21 @@ def merge_sort(l):
                 l[100:] = []
                 l[100:10] = []
             So the code from line59 to line66 can be refactored as following
-            mid = left + windows_size   # do not need to check range
-            right = mid + windows_size  # do not need to check range
-            left_window = l[left:mid]
-            right_window = l[mid:right]
+            mid = start + windows_size   # do not need to check range
+            end = mid + windows_size  # do not need to check range
+            left_window = l[start:mid]
+            right_window = l[mid:end]
             """
-            mid = left + window_size
-            # move this check to while loop
-            # if mid > len(l):  # example: [9, 8, 7, 6, 5, 4, 3 ,2 ,1]
-            #    break
-            right = mid + window_size
-            if right > len(l):
-                right = len(l)
-            left_window = l[left:mid]
-            right_window = l[mid:right]
+            mid = start + window_size - 1
+            end = start + 2*window_size - 1
+            if end > (len(l) - 1):
+                end = (len(l) - 1)
 
-            # print(f'w:{windows_size}, left:{left}, mid:{mid}, right:{right}')
-            _merge_two_sorted_list(left=left_window,
-                                   right=right_window,
-                                   dst=l,
-                                   dst_start=left)
+            _merge_two_sorted_list(dst=l, dst_start=start,
+                                   left_start=start, left_end=mid,
+                                   right_start=mid+1, right_end=end)
 
-            left += (2*window_size)  # inner loop
+            start += (2*window_size)  # inner loop
 
         window_size *= 2  # outer loop
 
@@ -84,25 +80,29 @@ def merge_sort(l):
 def merge_sort_recursive(l):
     """
     Time  Complexity: O(nlog(n)), T(n) = 2T(n/2) + n
-    Sapce Complexity: O(n), extra space to array copy
+    Sapce Complexity: O(n), extra space for array copy (_merge_two_sorted_list)
     Stable sorting
     """
+    def _merge_sort_recursive(l, start, end):
+
+        if start >= end:
+            return
+
+        mid = (start + end) // 2
+
+        print(f'start:{start}, mid:{mid}, end:{end}')
+
+        _merge_sort_recursive(l, start, mid)
+        _merge_sort_recursive(l, mid+1, end)
+
+        _merge_two_sorted_list(dst=l, dst_start=start,
+                               left_start=start, left_end=mid,
+                               right_start=mid+1, right_end=end)
+
     if len(l) <= 1:
         return
 
-    # use double slash for integer division
-    mid = len(l)//2
-
-    # print(f'l:{l}, mid:{mid}')
-
-    # slice is a copy in python
-    left = l[:mid]
-    right = l[mid:]
-
-    merge_sort_recursive(left)
-    merge_sort_recursive(right)
-
-    _merge_two_sorted_list(left=left, right=right, dst=l)
+    _merge_sort_recursive(l, 0, len(l)-1)
 
 
 def _get_partition(l, start, end):
@@ -153,11 +153,11 @@ def quick_sort(l):
 
         pivot = _get_partition(l, start, end)
 
-        # left partition
+        # start partition
         if start < pivot:
             stack.append(Pair(start=start, end=pivot-1))
 
-        # right partition
+        # end partition
         if end > pivot:
             stack.append(Pair(start=pivot + 1, end=end))
 
@@ -176,9 +176,9 @@ def quick_sort_recursive(l):
             return
 
         pivot = _get_partition(l, start, end)
-        # left part
+        # start part
         _quick_sort_recursive(l, start, pivot-1)
-        # right part
+        # end part
         _quick_sort_recursive(l, pivot+1, end)
 
     if len(l) <= 1:
@@ -188,8 +188,8 @@ def quick_sort_recursive(l):
 
 
 def main():
-    data = [2, 1, 0]
-    quick_sort(data)
+    data = [3, 2, 1, 0]
+    merge_sort_recursive(data)
     print(data)
 
 
