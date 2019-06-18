@@ -286,9 +286,9 @@ def insertion_sort(l):
     if len(l) <= 1:
         return
 
-    for new in range(1, len(l)):
+    for insert in range(1, len(l)):
         # compare from new-1 to 0
-        for compare in range(new-1, -1, -1):
+        for compare in range(insert-1, -1, -1):
             if l[compare] <= l[compare + 1]:
                 break
             else:
@@ -301,14 +301,14 @@ def insertion_sort_recursive(l):
     Space: O(n)
     """
 
-    def _insertion_sort_recursive(l, new):
+    def _insertion_sort_recursive(l, insert):
 
-        if new < 1:
+        if insert < 1:
             return
 
-        _insertion_sort_recursive(l, new-1)
+        _insertion_sort_recursive(l, insert-1)
         # compare from new-1 to 0
-        for compare in range(new-1, -1, -1):
+        for compare in range(insert-1, -1, -1):
             if l[compare] <= l[compare + 1]:
                 break
             else:
@@ -317,7 +317,7 @@ def insertion_sort_recursive(l):
     if len(l) <= 1:
         return
 
-    _insertion_sort_recursive(l, len(l)-1)
+    _insertion_sort_recursive(l, insert=len(l)-1)
 
 
 def main():
