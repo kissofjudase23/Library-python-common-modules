@@ -32,6 +32,7 @@ def _merge_two_sorted_list(dst, *, dst_start,
         right_runner += 1
         merge_runner += 1
 
+
 def merge_sort(l):
     """
     Time Complexity: O(nlog(n))
@@ -154,11 +155,11 @@ def quick_sort(l):
         pivot = _get_partition(l, start, end)
 
         # start partition
-        if start < pivot:
+        if start < pivot - 1:
             stack.append(Pair(start=start, end=pivot-1))
 
         # end partition
-        if end > pivot:
+        if pivot + 1 < end:
             stack.append(Pair(start=pivot + 1, end=end))
 
 
