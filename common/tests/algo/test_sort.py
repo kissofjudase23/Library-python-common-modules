@@ -34,8 +34,9 @@ class TestSorting(object):
                               SORT.insertion_sort,
                               SORT.insertion_sort_recursive,
                               SORT.selection_sort,
-                              SORT.selection_sort_recursive
-                              ]
+                              SORT.selection_sort_recursive,
+                              SORT.bubble_sort,
+                              SORT.bubble_sort_resursive]
 
         for algo in sorting_algorithms:
             actual = unsorted_list.copy()

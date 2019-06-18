@@ -190,7 +190,46 @@ def quick_sort_recursive(l):
 
 
 def bubble_sort(l):
-    pass
+    """
+    Time:  O(n^2)
+    Space: O(1)
+    """
+
+    if len(l) <= 1:
+        return
+
+    # bubble in len(l)-1 to 1
+    for bubble in range(len(l)-1, 0, -1):
+        is_swap = False
+        for compare in range(0, bubble):
+            if l[compare] > l[compare + 1]:
+                l[compare], l[compare+1] = l[compare+1], l[compare]
+                is_swap = True
+        if not is_swap:
+            break
+
+
+def bubble_sort_resursive(l):
+    """
+    Time:  O(n^2)
+    Space: O(n)
+    """
+
+    def _bubble_sort_resursive(l, bubble):
+
+        if bubble > len(l) - 1:
+            return
+
+        _bubble_sort_resursive(l, bubble + 1)
+
+        for compare in range(0, bubble):
+            if l[compare] > l[compare + 1]:
+                l[compare], l[compare+1] = l[compare+1], l[compare]
+
+    if len(l) <= 1:
+        return
+
+    _bubble_sort_resursive(l=l, bubble=1)
 
 
 def selection_sort(l):
@@ -236,7 +275,7 @@ def selection_sort_recursive(l):
     if len(l) <= 1:
         return
 
-    _selection_sort_recursive(l, len(l)-1)
+    _selection_sort_recursive(l, select=len(l)-1)
 
 
 def insertion_sort(l):
@@ -283,7 +322,7 @@ def insertion_sort_recursive(l):
 
 def main():
     data = [3, 2, 1, 0]
-    selection_sort_recursive(data)
+    bubble_sort_resursive(data)
     print(data)
 
 
