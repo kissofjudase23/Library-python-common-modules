@@ -91,7 +91,7 @@ def merge_sort_recursive(l):
 
         mid = (start + end) // 2
 
-        print(f'start:{start}, mid:{mid}, end:{end}')
+        # print(f'start:{start}, mid:{mid}, end:{end}')
 
         _merge_sort_recursive(l, start, mid)
         _merge_sort_recursive(l, mid+1, end)
@@ -103,7 +103,7 @@ def merge_sort_recursive(l):
     if len(l) <= 1:
         return
 
-    _merge_sort_recursive(l, 0, len(l)-1)
+    _merge_sort_recursive(l=l, start=0, end=len(l)-1)
 
 
 def _get_partition(l, start, end):
@@ -189,9 +189,52 @@ def quick_sort_recursive(l):
     _quick_sort_recursive(l=l, start=0, end=len(l) - 1)
 
 
+def insertion_sort(l):
+    """
+    Time:  O(n^2)
+    Space: O(1)
+    """
+    if len(l) <= 1:
+        return
+
+    for new in range(1, len(l)):
+        # compare from new-1 to 0
+        for compare in range(new-1, -1, -1):
+            if l[compare] <= l[compare + 1]:
+                break
+            else:
+                l[compare], l[compare+1] = l[compare+1], l[compare]
+
+
+def insertion_sort_recursive(l):
+    """
+    Time:  O(n^2)
+    Space: O(n)
+    """
+
+    def _insertion_sort_recursive(l, new):
+
+        if new < 1:
+            return
+
+        _insertion_sort_recursive(l, new-1)
+        # compare from new-1 to 0
+        for compare in range(new-1, -1, -1):
+            if l[compare] <= l[compare + 1]:
+                break
+            else:
+                l[compare], l[compare+1] = l[compare+1], l[compare]
+
+    if len(l) <= 1:
+        return
+
+    _insertion_sort_recursive(l, len(l)-1)
+
+
+
 def main():
     data = [3, 2, 1, 0]
-    merge_sort_recursive(data)
+    insertion_sort_recursive(data)
     print(data)
 
 

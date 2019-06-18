@@ -27,18 +27,14 @@ class TestSorting(object):
         expected = unsorted_list.copy()
         expected.sort()
 
-        merge_sort_actual = unsorted_list.copy()
-        SORT.merge_sort(merge_sort_actual)
-        assert expected == merge_sort_actual
+        sorting_algorithms = [SORT.merge_sort,
+                              SORT.merge_sort_recursive,
+                              SORT.quick_sort,
+                              SORT.quick_sort_recursive,
+                              SORT.insertion_sort,
+                              SORT.insertion_sort_recursive]
 
-        merge_sort_recursive_actual = unsorted_list.copy()
-        SORT.merge_sort_recursive(merge_sort_recursive_actual)
-        assert expected == merge_sort_recursive_actual
-
-        quick_sort_recursive_actual = unsorted_list.copy()
-        SORT.quick_sort_recursive(quick_sort_recursive_actual)
-        assert expected == quick_sort_recursive_actual
-
-        quick_sort_actual = unsorted_list.copy()
-        SORT.quick_sort(quick_sort_actual)
-        assert expected == quick_sort_actual
+        for algo in sorting_algorithms:
+            actual = unsorted_list.copy()
+            algo(actual)
+            assert expected == actual
