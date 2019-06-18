@@ -189,6 +189,56 @@ def quick_sort_recursive(l):
     _quick_sort_recursive(l=l, start=0, end=len(l) - 1)
 
 
+def bubble_sort(l):
+    pass
+
+
+def selection_sort(l):
+    """
+    Time:  O(n^2)
+    Space: O(1)
+    """
+    if len(l) <= 1:
+        return
+
+    # from 0 to len - 2
+    for select in range(0, len(l)-1):
+        minimum = select
+        # from select + 1 to len - 1
+        for compare in range(select + 1, len(l)):
+            if l[compare] < l[minimum]:
+                minimum = compare
+
+        if select != minimum:
+            l[select], l[minimum] = l[minimum], l[select]
+
+
+def selection_sort_recursive(l):
+    """
+    Time:  O(n^2)
+    Space: O(n)
+    """
+    def _selection_sort_recursive(l, select):
+
+        if select < 0:
+            return
+
+        _selection_sort_recursive(l, select - 1)
+
+        minimum = select
+        for compare in range(select + 1, len(l)):
+            if l[compare] < l[minimum]:
+                minimum = compare
+
+        if select != minimum:
+            l[select], l[minimum] = l[minimum], l[select]
+
+    if len(l) <= 1:
+        return
+
+    _selection_sort_recursive(l, len(l)-1)
+
+
 def insertion_sort(l):
     """
     Time:  O(n^2)
@@ -231,10 +281,9 @@ def insertion_sort_recursive(l):
     _insertion_sort_recursive(l, len(l)-1)
 
 
-
 def main():
     data = [3, 2, 1, 0]
-    insertion_sort_recursive(data)
+    selection_sort_recursive(data)
     print(data)
 
 

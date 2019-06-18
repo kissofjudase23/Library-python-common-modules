@@ -32,7 +32,10 @@ class TestSorting(object):
                               SORT.quick_sort,
                               SORT.quick_sort_recursive,
                               SORT.insertion_sort,
-                              SORT.insertion_sort_recursive]
+                              SORT.insertion_sort_recursive,
+                              SORT.selection_sort,
+                              SORT.selection_sort_recursive
+                              ]
 
         for algo in sorting_algorithms:
             actual = unsorted_list.copy()
