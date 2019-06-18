@@ -275,7 +275,7 @@ def selection_sort_recursive(l):
     if len(l) <= 1:
         return
 
-    _selection_sort_recursive(l, select=len(l)-1)
+    _selection_sort_recursive(l, select=len(l)-2)
 
 
 def insertion_sort(l):
