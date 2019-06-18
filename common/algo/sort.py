@@ -134,6 +134,7 @@ def quick_sort(l):
     Sapce Complexity: O(1)
     Ref:
     1. https://www.techiedelight.com/iterative-implementation-of-quicksort/
+    2. https://stackoverflow.com/questions/39666714/quick-sort-implement-by-queue
     """
 
     if len(l) <= 1:
