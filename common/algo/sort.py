@@ -106,6 +106,104 @@ def merge_sort_recursive(l):
     _merge_sort_recursive(l=l, start=0, end=len(l)-1)
 
 
+def _merge_two_sorted_list_v2(dst, dst_start,
+                              left_window,
+                              right_window):
+
+    merge_runner = dst_start
+    left_runner = right_runner = 0
+
+    while left_runner < len(left_window) and right_runner < len(right_window):
+        if left_window[left_runner] <= right_window[right_runner]:
+            dst[merge_runner] = left_window[left_runner]
+            left_runner += 1
+        else:
+            dst[merge_runner] = right_window[right_runner]
+            right_runner += 1
+        merge_runner += 1
+
+    while left_runner < len(left_window):
+        dst[merge_runner] = left_window[left_runner]
+        left_runner += 1
+        merge_runner += 1
+
+    while right_runner < len(right_window):
+        dst[merge_runner] = right_window[right_runner]
+        right_runner += 1
+        merge_runner += 1
+
+
+def merge_sort_v2(l):
+    """
+    Time Complexity: O(nlog(n))
+        log(n) round (window size),
+        n in each round (merge sorted lists) => total nlong(n)
+    Sapce Complexity: O(n), extra space to array copy
+    Stable sorting
+    """
+
+    window_size = 1
+
+    # windows_size: [1, 2 ,4 ,8 ,16 ...] which means the sorted list unit
+    while window_size <= (len(l) - 1):
+        # windows_size:1, start:[0, 2, 4, 6, 8]
+        # windows_size:2, start:[0, 4, 8]
+        # windows_size:4: start:[0, 8]
+        start = 0
+        while (start + window_size) < len(l):
+            """
+            Python slice can help to handle out of range issues
+            for example:
+                l = [1, 2 ,3]
+                l[1:100] = [2, 3]
+                l[100:] = []
+                l[100:10] = []
+            So the code from line59 to line66 can be refactored as following
+            mid = start + windows_size   # do not need to check range
+            end = mid + windows_size  # do not need to check range
+            left_window = l[start:mid]
+            right_window = l[mid:end]
+            """
+            mid = start + window_size
+            end = mid + window_size
+            if end > len(l):
+                end = len(l)
+
+            left_window = l[start:mid]
+            right_window = l[mid:end]
+
+            _merge_two_sorted_list_v2(dst=l, dst_start=start,
+                                      left_window=left_window,
+                                      right_window=right_window)
+
+            start += (2*window_size)  # inner loop
+
+        window_size *= 2  # outer loop
+
+
+def merge_sort_recursive_v2(l):
+    """
+    Time  Complexity: O(nlog(n)), T(n) = 2T(n/2) + n
+    Sapce Complexity: O(n), extra space for array copy (_merge_two_sorted_list)
+    Stable sorting
+    """
+
+    if len(l) <= 1:
+        return
+
+    mid = len(l)//2
+
+    left_window = l[0:mid]
+    right_window = l[mid:len(l)]
+
+    merge_sort_recursive_v2(left_window)
+    merge_sort_recursive_v2(right_window)
+
+    _merge_two_sorted_list_v2(dst=l, dst_start=0,
+                              left_window=left_window,
+                              right_window=right_window)
+
+
 def _get_partition(l, start, end):
     border = start
 
@@ -115,9 +213,9 @@ def _get_partition(l, start, end):
     # print(f'start:{start}, end:{end}, pivot:{pivot}, l[pivot]:{l[pivot]}, l:{l}')
 
     # find the border
-    for runner in range(start, end):
-        if l[runner] <= l[pivot]:
-            l[border], l[runner] = l[runner], l[border]
+    for compare in range(start, end):
+        if l[compare] <= l[pivot]:
+            l[border], l[compare] = l[compare], l[border]
             border += 1
 
     # switch the pivot to the border
@@ -321,8 +419,9 @@ def insertion_sort_recursive(l):
 
 
 def main():
-    data = [3, 2, 1, 0]
-    bubble_sort_resursive(data)
+    data = [i for i in range(10, 0, -1)]
+    print(data)
+    merge_sort_v2(data)
     print(data)
 
 

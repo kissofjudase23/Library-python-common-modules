@@ -29,6 +29,8 @@ class TestSorting(object):
 
         sorting_algorithms = [SORT.merge_sort,
                               SORT.merge_sort_recursive,
+                              SORT.merge_sort_v2,
+                              SORT.merge_sort_recursive_v2,
                               SORT.quick_sort,
                               SORT.quick_sort_recursive,
                               SORT.insertion_sort,
