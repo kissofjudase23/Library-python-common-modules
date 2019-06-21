@@ -103,21 +103,29 @@ class Trie(object):
             Return:
                 True : Remove this node from parent dict
             """
+            # find the word
             if index == len(word):
-                return current.end_of_word
+                # delete the node only when current.end_of_word is True ??
+                if not current.end_of_word:
+                    return False
+
+                current.end_of_word = False
+                # delete the node only when there is no children
+                return not len(current.children)
 
             c = word[index]
             child = current.children.get(c)
+            # can not find the word
             if not child:
                 return False
 
             should_delete_child = _delete(child, word, index=index+1)
+            if not should_delete_child:
+                return False
 
-            if should_delete_child:
-                current.children.pop(c)
-                return len(current.children) == 0
-
-            return False
+            # remove the child reference
+            current.children.pop(c)
+            return not len(current.children)
 
         _delete(self.root, word, index=0)
 
