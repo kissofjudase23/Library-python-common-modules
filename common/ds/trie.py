@@ -1,4 +1,5 @@
 import sys
+import collections
 
 
 class Node(object):
@@ -96,8 +97,43 @@ class Trie(object):
 
         return _search_recursive(self.root, word, index=0)
 
-    def delete_recursive(self, word: str) -> None:
+    def delete(self, word: str) -> None:
+        """
+        Time: O(len(word))
+        Space: O(len(word)) <-- stack len
+        """
+        stack = list()
+        current = self.root
+        Pair = collections.namedtuple('Pair', ['current', 'child_c'])
 
+        for c in word:
+            # push the node in the reverse order
+            stack.append(Pair(current=current, child_c=c))
+            # can not find the character of the word
+            child = current.children.get(c)
+            if not child:
+                return
+            current = child
+
+        # delete the node only when current.end_of_word is True
+        if not current.end_of_word:
+            return
+        current.end_of_word = False
+        # delete the node only when there is no children
+        should_delete_child = not len(current.children)
+
+        while should_delete_child and not len(stack):
+            pair = stack.pop()
+            current, child_c = pair.current, pair.child_c
+            current.childrent.pop(child_c)
+            # delete the node only when there is no children
+            should_delete_child = not len(current)
+
+    def delete_recursive(self, word: str) -> None:
+        """
+        Time: O(len(word))
+        Space: O(len(word))
+        """
         def _delete(current, word, *, index) -> bool:
             """
             Return:
@@ -105,7 +141,7 @@ class Trie(object):
             """
             # find the word
             if index == len(word):
-                # delete the node only when current.end_of_word is True ??
+                # delete the node only when current.end_of_word is True
                 if not current.end_of_word:
                     return False
 
@@ -115,7 +151,7 @@ class Trie(object):
 
             c = word[index]
             child = current.children.get(c)
-            # can not find the word
+            # can not find the character of the word
             if not child:
                 return False
 

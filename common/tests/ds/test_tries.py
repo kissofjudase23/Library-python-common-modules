@@ -17,9 +17,18 @@ class TestStack(object):
         assert trie.starts_with('a') is True
         assert trie.starts_with('d') is False
 
-        trie.delete_recursive('abcd')
-        assert trie.search('abcd') is False
-        assert trie.starts_with('ab') is False
+    def test_delete(self):
+        trie = Trie()
+
+        trie.insert('abc')
+        trie.insert('abcd')
+
+        assert trie.search('abc') is True
+        assert trie.search('abcd') is True
+
+        trie.delete('abc')
+        assert trie.search('abc') is False
+        assert trie.search('abcd') is True
 
     def test_delete_recursive(self):
         trie = Trie()
