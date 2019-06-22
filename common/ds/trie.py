@@ -104,11 +104,11 @@ class Trie(object):
         """
         stack = list()
         current = self.root
-        Pair = collections.namedtuple('Pair', ['current', 'child_c'])
+        Pair = collections.namedtuple('Pair', ['parent', 'child_c'])
 
         for c in word:
             # push the node in the reverse order
-            stack.append(Pair(current=current, child_c=c))
+            stack.append(Pair(parent=current, child_c=c))
             # can not find the character of the word
             child = current.children.get(c)
             if not child:
@@ -122,12 +122,12 @@ class Trie(object):
         # delete the node only when there is no children
         should_delete_child = not len(current.children)
 
-        while should_delete_child and not len(stack):
+        while should_delete_child and len(stack):
             pair = stack.pop()
-            current, child_c = pair.current, pair.child_c
-            current.childrent.pop(child_c)
+            parent, child_c = pair.parent, pair.child_c
+            parent.childrent.pop(child_c)
             # delete the node only when there is no children
-            should_delete_child = not len(current)
+            should_delete_child = not len(parent)
 
     def delete_recursive(self, word: str) -> None:
         """
