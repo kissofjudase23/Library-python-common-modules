@@ -1,7 +1,7 @@
 import sys
 
 
-def binary_search(l, target):
+def binary_search(l: list, target) -> int:
     """
     Time  Complexity: O(log(n)), total log(n) round, each round takes O(1)
     Sapce Complexity: O(1)
@@ -23,7 +23,7 @@ def binary_search(l, target):
     return -1
 
 
-def binary_search_recursive(l, target):
+def binary_search_recursive(l: list, target) -> int:
     """
     Time  Complexity: O(log(n)), T(n) = T(n/2) + 1
     Sapce Complexity: O(log(n))

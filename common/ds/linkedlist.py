@@ -289,12 +289,12 @@ class LinkedListABC(ABC):
     def len(self, val):
         self._len = val
 
-    def bulk_push_back(self, input_list):
+    def bulk_push_back(self, input_list: list):
         """ O(n) """
         for i in input_list:
             self.push_back(i)
 
-    def bulk_push_front(self, input_list):
+    def bulk_push_front(self, input_list: list):
         """ O(n^2) """
         for i in input_list:
             self.push_front(i)

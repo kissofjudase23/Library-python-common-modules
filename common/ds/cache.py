@@ -19,7 +19,7 @@ class CacheABC(ABC):
         raise NotImplementedError('please implemet this property')
 
     @abstractmethod
-    def set(self, key, val):
+    def set(self, key, val) -> None:
         raise NotImplementedError('please implemet this method')
 
     @abstractmethod
@@ -27,7 +27,7 @@ class CacheABC(ABC):
         raise NotImplementedError('please implemet this method')
 
     @abstractmethod
-    def delete(self, key):
+    def delete(self, key) -> None:
         raise NotImplementedError('please implemet this method')
 
 
@@ -51,7 +51,7 @@ class LRUCache(CacheABC):
     def len(self):
         return self.d_linked_list.len
 
-    def set(self, key, val):
+    def set(self, key, val) -> None:
         """O(1)"""
 
         if key in self.map:
@@ -79,7 +79,7 @@ class LRUCache(CacheABC):
 
         return node.data
 
-    def delete(self, key):
+    def delete(self, key) -> None:
 
         if key not in self.map:
             return None

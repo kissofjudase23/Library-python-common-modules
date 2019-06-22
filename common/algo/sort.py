@@ -2,9 +2,9 @@ import sys
 import collections
 
 
-def _merge_two_sorted_list(dst, *, dst_start,
-                           left_start, left_end,
-                           right_start, right_end):
+def _merge_two_sorted_list(dst: list, *, dst_start: int,
+                           left_start: int, left_end: int,
+                           right_start: int, right_end: int) -> None:
 
     left_window = dst[left_start:left_end + 1]        # start -> mid
     right_window = dst[right_start:right_end + 1]     # mid + 1 -> end
@@ -33,7 +33,7 @@ def _merge_two_sorted_list(dst, *, dst_start,
         merge_runner += 1
 
 
-def merge_sort(l):
+def merge_sort(l: list) -> None:
     """
     Time Complexity: O(nlog(n))
         log(n) round (window size),
@@ -78,7 +78,7 @@ def merge_sort(l):
         window_size *= 2  # outer loop
 
 
-def merge_sort_recursive(l):
+def merge_sort_recursive(l: list) -> None:
     """
     Time  Complexity: O(nlog(n)), T(n) = 2T(n/2) + n
     Sapce Complexity: O(n), extra space for array copy (_merge_two_sorted_list)
@@ -106,9 +106,9 @@ def merge_sort_recursive(l):
     _merge_sort_recursive(l=l, start=0, end=len(l)-1)
 
 
-def _merge_two_sorted_list_v2(dst, dst_start,
-                              left_window,
-                              right_window):
+def _merge_two_sorted_list_v2(dst: list, dst_start: int,
+                              left_window: list,
+                              right_window: list) -> None:
 
     merge_runner = dst_start
     left_runner = right_runner = 0
@@ -133,7 +133,7 @@ def _merge_two_sorted_list_v2(dst, dst_start,
         merge_runner += 1
 
 
-def merge_sort_v2(l):
+def merge_sort_v2(l: list) -> None:
     """
     Time Complexity: O(nlog(n))
         log(n) round (window size),
@@ -181,7 +181,7 @@ def merge_sort_v2(l):
         window_size *= 2  # outer loop
 
 
-def merge_sort_recursive_v2(l):
+def merge_sort_recursive_v2(l: list) -> None:
     """
     Time  Complexity: O(nlog(n)), T(n) = 2T(n/2) + n
     Sapce Complexity: O(n), extra space for array copy (_merge_two_sorted_list)
@@ -204,7 +204,7 @@ def merge_sort_recursive_v2(l):
                               right_window=right_window)
 
 
-def _get_partition(l, start, end):
+def _get_partition(l: list, start, end) -> None:
     border = start
 
     # use median of three to determine pivot can get rid of worst cases
@@ -226,7 +226,7 @@ def _get_partition(l, start, end):
     return border
 
 
-def quick_sort(l):
+def quick_sort(l: list) -> None:
     """
     Time Complexity: O(nlog(n))
     Sapce Complexity: O(1)
@@ -262,7 +262,7 @@ def quick_sort(l):
             stack.append(Pair(start=pivot + 1, end=end))
 
 
-def quick_sort_recursive(l):
+def quick_sort_recursive(l: list) -> None:
     """
     Time Complexity:  O(nlog(n))
     Sapce Complexity: O(log(n)) ~ O(n)
@@ -287,7 +287,7 @@ def quick_sort_recursive(l):
     _quick_sort_recursive(l=l, start=0, end=len(l) - 1)
 
 
-def bubble_sort(l):
+def bubble_sort(l: list) -> None:
     """
     Time:  O(n^2)
     Space: O(1)
@@ -307,7 +307,7 @@ def bubble_sort(l):
             break
 
 
-def bubble_sort_resursive(l):
+def bubble_sort_resursive(l: list) -> None:
     """
     Time:  O(n^2)
     Space: O(n)
@@ -330,7 +330,7 @@ def bubble_sort_resursive(l):
     _bubble_sort_resursive(l=l, bubble=1)
 
 
-def selection_sort(l):
+def selection_sort(l: list) -> None:
     """
     Time:  O(n^2)
     Space: O(1)
@@ -350,7 +350,7 @@ def selection_sort(l):
             l[select], l[minimum] = l[minimum], l[select]
 
 
-def selection_sort_recursive(l):
+def selection_sort_recursive(l: list) -> None:
     """
     Time:  O(n^2)
     Space: O(n)
@@ -376,7 +376,7 @@ def selection_sort_recursive(l):
     _selection_sort_recursive(l, select=len(l)-2)
 
 
-def insertion_sort(l):
+def insertion_sort(l: list) -> None:
     """
     Time:  O(n^2)
     Space: O(1)
@@ -393,7 +393,7 @@ def insertion_sort(l):
                 l[compare], l[compare+1] = l[compare+1], l[compare]
 
 
-def insertion_sort_recursive(l):
+def insertion_sort_recursive(l: list) -> None:
     """
     Time:  O(n^2)
     Space: O(n)

@@ -54,7 +54,7 @@ class StackABC(ABC):
     def len(self, val):
         self._len = val
 
-    def bulk_push(self, input_list):
+    def bulk_push(self, input_list: list):
         """ O(n) """
         for v in input_list:
             self.push(v)
