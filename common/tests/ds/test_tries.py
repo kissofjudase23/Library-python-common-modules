@@ -5,7 +5,7 @@ from ...ds.trie import Trie
 
 class TestStack(object):
 
-    def test_trie(self):
+    def test_search_starts_with(self):
         trie = Trie()
         trie.insert('abcd')
 
@@ -20,3 +20,16 @@ class TestStack(object):
         trie.delete_recursive('abcd')
         assert trie.search('abcd') is False
         assert trie.starts_with('ab') is False
+
+    def test_delete_recursive(self):
+        trie = Trie()
+
+        trie.insert('abc')
+        trie.insert('abcd')
+
+        assert trie.search('abc') is True
+        assert trie.search('abcd') is True
+
+        trie.delete_recursive('abc')
+        assert trie.search('abc') is False
+        assert trie.search('abcd') is True
