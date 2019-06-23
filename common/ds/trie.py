@@ -120,14 +120,14 @@ class Trie(object):
             return
         current.end_of_word = False
         # delete the node only when there is no children
-        should_delete_child = not len(current.children)
+        should_delete_child = not current.children
 
-        while should_delete_child and len(stack):
+        while should_delete_child and stack:
             pair = stack.pop()
             parent, child_c = pair.parent, pair.child_c
             parent.childrent.pop(child_c)
             # delete the node only when there is no children
-            should_delete_child = not len(parent)
+            should_delete_child = not parent.childrent
 
     def delete_recursive(self, word: str) -> None:
         """
@@ -147,7 +147,7 @@ class Trie(object):
 
                 current.end_of_word = False
                 # delete the node only when there is no children
-                return not len(current.children)
+                return not current.children
 
             c = word[index]
             child = current.children.get(c)
@@ -161,7 +161,7 @@ class Trie(object):
 
             # remove the child reference
             current.children.pop(c)
-            return not len(current.children)
+            return not current.children
 
         _delete(self.root, word, index=0)
 
