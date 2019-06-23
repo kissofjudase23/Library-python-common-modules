@@ -18,7 +18,7 @@ class Traversal(object):
         stack = list()
         current = root
 
-        while current or len(stack):
+        while current or stack:
             if current:
                 visits.append(current.val)
                 if current.right:
@@ -26,6 +26,28 @@ class Traversal(object):
                 current = current.left
             else:
                 current = stack.pop()
+
+        return visits
+
+    @staticmethod
+    def preorder_v2(root: TreeNode) -> list:
+        """
+        https://www.geeksforgeeks.org/iterative-preorder-traversal/
+        """
+        visits = list()
+        stack = list()
+
+        if not root:
+            return visits
+
+        stack.append(root)
+        while stack:
+            current = stack.pop()
+            visits.append(current.val)
+            if current.right:
+                stack.push(current.right)
+            if current.left:
+                stack.push(current.left)
 
         return visits
 
@@ -56,7 +78,7 @@ class Traversal(object):
         visits = list()
         stack = list()
         current = root
-        while current or len(stack):
+        while current or stack:
             if current:
                 stack.append(current)
                 current = current.left
@@ -88,7 +110,30 @@ class Traversal(object):
 
     @staticmethod
     def postorder(root: TreeNode) -> list:
-        pass
+        """
+        Ref:
+        https://www.geeksforgeeks.org/iterative-postorder-traversal/
+        """
+        stack = list()
+        visits = list()
+
+        if not root:
+            return stack
+
+        stack.append(root)
+
+        while stack:
+            current = stack.pop()
+            visits.append(current.val)
+
+            if current.left:
+                stack.append(current.left)
+            if current.right:
+                stack.append(current.right)
+
+        visits.reverse()
+
+        return visits
 
     @staticmethod
     def postorder_recursive(root: TreeNode) -> list:
@@ -200,6 +245,7 @@ def main():
     print(Traversal.preorder(bst.root))
 
     print(Traversal.postorder_recursive(bst.root))
+    print(Traversal.postorder(bst.root))
 
 
 if __name__ == "__main__":
