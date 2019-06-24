@@ -1,5 +1,6 @@
 import sys
 from abc import ABC, abstractmethod
+from collections import deque
 
 
 class TreeNode(object):
@@ -118,7 +119,7 @@ class Traversal(object):
         visits = list()
 
         if not root:
-            return stack
+            return visits
 
         stack.append(root)
 
@@ -151,6 +152,71 @@ class Traversal(object):
             return visits
 
         _postorder_recursive(root)
+        return visits
+
+    @staticmethod
+    def bfs(root: TreeNode) -> list:
+        visits = list()
+        queue = deque()
+
+        if not root:
+            return visits
+
+        queue.append(root)
+        while queue:
+            current = queue.popleft()
+            visits.append(current.val)
+            if current.left:
+                queue.append(current.left)
+
+            if current.right:
+                queue.append(current.right)
+
+        return visits
+
+    def level_order_bfs(root: TreeNode) -> list:
+        visits = list()
+        queue = deque()
+
+        if not root:
+            return visits
+
+        queue.append(root)
+
+        while queue:
+            level_visits = list()
+            level_size = len(queue)
+            for _ in range(level_size):
+                current = queue.popleft()
+                level_visits.append(current.val)
+                if current.left:
+                    queue.append(current.left)
+                if current.right:
+                    queue.append(current.right)
+
+            visits.append(level_visits)
+        return visits
+
+    def level_order_dfs(root: TreeNode) ->list:
+
+        visits = list()
+
+        def _level_order_dfs(node, level):
+            if len(visits) < (level + 1):
+                visits.append(list())
+
+            visits[level].append(node.val)
+
+            if node.left:
+                _level_order_dfs(node.left, level+1)
+            if node.right:
+                _level_order_dfs(node.right, level+1)
+
+        if not root:
+            return visits
+
+        _level_order_dfs(node=root, level=0)
+
         return visits
 
 
@@ -246,6 +312,12 @@ def main():
 
     print(Traversal.postorder_recursive(bst.root))
     print(Traversal.postorder(bst.root))
+
+    print(Traversal.bfs(bst.root))
+
+    print(Traversal.level_order_bfs(bst.root))
+    print(Traversal.level_order_dfs(bst.root))
+
 
 
 if __name__ == "__main__":
