@@ -73,6 +73,61 @@ class Trie(object):
         """
         return self._search(word=word, is_prefix=False)
 
+    def search_with_wildcard(self, word: str) -> bool:
+        """
+        search(word) can search a literal word or a regular expression string containing only letters
+        a-z or .. A . means it can represent any one letter.
+        """
+        stack = list()
+        stack.append([self.root, 0])
+        word_len = len(word)
+
+        # use DFS
+        while stack:
+            node, index = stack.pop()
+            if index == word_len:
+                if node.end_of_word:
+                    return True
+                continue
+            c = word[index]
+            if c == '.':
+                for _, child in node.children.items():
+                    stack.append([child, index+1])
+            else:
+                child = node.children.get(c)
+                if not child:
+                    continue
+                stack.append([child, index+1])
+
+        return False
+
+    def search_with_wildcard_recursive(self, word: str) -> bool:
+
+        def _search_with_wildcard_recursive(node: Node,
+                                            word: str,
+                                            index: int) -> bool:
+
+            if index == len(word):
+                return node.end_of_word
+
+            c = word[index]
+            if c == '.':
+                for _, child in node.children.items():
+                    res = _search_with_wildcard_recursive(child, word, index+1)
+                    if res:
+                        return True
+                    continue
+                return False
+            else:
+                child = node.children.get(c)
+                if not child:
+                    return False
+                return _search_with_wildcard_recursive(child, word, index+1)
+
+        return _search_with_wildcard_recursive(node=self.root,
+                                               word=word,
+                                               index=0)
+
     def starts_with(self, prefix: str) -> bool:
         """
         Returns if there is any word in the trie that starts with the given prefix.
@@ -168,18 +223,29 @@ class Trie(object):
 
 def main():
     trie = Trie()
-    trie.insert("abc")
 
-    print(trie.search("abc"))
-    print(trie.search("ab"))
+    trie.insert("ran")
+    trie.insert("rune")
+    trie.insert("runner")
+    trie.insert("runs")
+    trie.insert("add")
+    trie.insert("adds")
+    trie.insert("adder")
+    trie.insert("addee")
 
-    print(trie.starts_with("a"))
-    print(trie.starts_with("ab"))
-    print(trie.starts_with("abc"))
+    print(trie.search_with_wildcard('....e.'))
+    print(trie.search_with_wildcard_recursive('....e.'))
 
-    trie.delete_recursive("abc")
-    print(trie.search("abc"))
-    print(trie.starts_with("ab"))
+    # print(trie.search("abc"))
+    # print(trie.search("ab"))
+
+    # print(trie.starts_with("a"))
+    # print(trie.starts_with("ab"))
+    # print(trie.starts_with("abc"))
+
+    # trie.delete_recursive("abc")
+    # print(trie.search("abc"))
+    # print(trie.starts_with("ab"))
 
 
 if __name__ == "__main__":
