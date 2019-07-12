@@ -2,6 +2,44 @@ import sys
 import collections
 
 
+def check_wiggle(l: list) -> None:
+    less = True
+    # This is a greedy algorithm
+    for i in range(0, len(l)-1):
+        if less:
+            if l[i] > l[i+1]:
+                return False
+        else:
+            if l[i] < l[i+1]:
+                return False
+
+        less = not less
+
+    return True
+
+
+def wiggle_sort(l: list) -> None:
+    """
+    nums[0] <= nums[1] >= nums[2] <= nums[3]
+    Time Complexity: O(n)
+    """
+    if len(l) <= 1:
+        return
+
+    less = True
+
+    # This is a greedy algorithm
+    for i in range(0, len(l)-1):
+        if less:
+            if l[i] > l[i+1]:
+                l[i], l[i+1] = l[i+1], l[i]
+        else:
+            if l[i] < l[i+1]:
+                l[i], l[i+1] = l[i+1], l[i]
+
+        less = not less
+
+
 def _merge_two_sorted_list(dst: list, *, dst_start: int,
                            left_start: int, left_end: int,
                            right_start: int, right_end: int) -> None:

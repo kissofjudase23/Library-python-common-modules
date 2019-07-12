@@ -5,7 +5,7 @@ from ...algo import sort as SORT
 
 class TestSorting(object):
 
-    @pytest.mark.parametrize('unsorted_list', [
+    @pytest.mark.parametrize('target', [
         pytest.param([]),
         pytest.param([1]),
         pytest.param([1, 2]),
@@ -23,8 +23,8 @@ class TestSorting(object):
         pytest.param([i for i in range(0, 15, 2)]),
         pytest.param([i for i in range(0, 16, 2)]),
     ])
-    def test_fast(self, unsorted_list):
-        expected = unsorted_list.copy()
+    def test_fast(self, target):
+        expected = target.copy()
         expected.sort()
 
         sorting_algorithms = [SORT.merge_sort,
@@ -41,6 +41,14 @@ class TestSorting(object):
                               SORT.bubble_sort_resursive]
 
         for algo in sorting_algorithms:
-            actual = unsorted_list.copy()
+            actual = target.copy()
             algo(actual)
             assert expected == actual
+
+    @pytest.mark.parametrize('target', [
+        pytest.param([1, 5, 1, 1, 6, 4]),
+        pytest.param([3, 5, 2, 1, 6, 4])
+    ])
+    def test_wiggle(self, target):
+        SORT.wiggle_sort(target)
+        assert SORT.check_wiggle(target) is True
