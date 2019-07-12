@@ -20,52 +20,18 @@ def check_wiggle(l: list) -> None:
 
 def heap_sort(l: list) -> None:
 
-    def max_heapify(l: list):
-
-        # from len(l)//2-1 to 0
+    def max_heapify(l: list, cur, boundary):
         # bubble down operation
-        for target in range(len(l)//2-1, -1, -1):
-            cur = target
-            while cur < len(l):
-                biggest = cur
-                left = 2 * cur + 1
-                right = 2 * cur + 2
-
-                # find the biggest
-                if left < len(l) and l[left] > l[biggest]:
-                    biggest = left
-
-                if right < len(l) and l[right] > l[biggest]:
-                    biggest = right
-
-                # stop, do not need to heapify
-                if biggest == cur:
-                    break
-
-                # continue to heapify
-                l[biggest], l[cur] = l[cur], l[biggest]
-                cur = biggest
-
-    if len(l) <= 1:
-        return
-
-    max_heapify(l)
-
-    # from len(l)-1 to 1
-    for last in range(len(l)-1, 0, -1):
-        # swap the max to the current last index
-        # bubble down operation
-        l[0], l[last] = l[last], l[0]
-        cur = 0
-        while cur < last:
+        while cur < boundary:
             biggest = cur
-            left = cur * 2 + 1
-            right = cur * 2 + 2
+            left = 2 * cur + 1
+            right = 2 * cur + 2
 
-            if left < last and l[left] > l[biggest]:
+            # find the biggest
+            if left < boundary and l[left] > l[biggest]:
                 biggest = left
 
-            if right < last and l[right] > l[biggest]:
+            if right < boundary and l[right] > l[biggest]:
                 biggest = right
 
             # stop, do not need to heapify
@@ -75,6 +41,20 @@ def heap_sort(l: list) -> None:
             # continue to heapify
             l[biggest], l[cur] = l[cur], l[biggest]
             cur = biggest
+
+    if len(l) <= 1:
+        return
+
+    # bottom up heapify from len(l)//2-1 to 0 (skip the nodes on last level)
+    for target in range(len(l)//2-1, -1, -1):
+        max_heapify(l=l, cur=target, boundary=len(l))
+
+    # from len(l)-1 to 1
+    for boundary in range(len(l)-1, 0, -1):
+        # swap the max to the current last index
+        l[0], l[boundary] = l[boundary], l[0]
+        # heapify
+        max_heapify(l=l, cur=0, boundary=boundary)
 
 
 def wiggle_sort(l: list) -> None:
