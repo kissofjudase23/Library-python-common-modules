@@ -319,6 +319,5 @@ def main():
     print(Traversal.level_order_dfs(bst.root))
 
 
-
 if __name__ == "__main__":
     sys.exit(main())

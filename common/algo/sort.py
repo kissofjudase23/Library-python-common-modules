@@ -18,6 +18,65 @@ def check_wiggle(l: list) -> None:
     return True
 
 
+def heap_sort(l: list) -> None:
+
+    def max_heapify(l: list):
+
+        # from len(l)//2-1 to 0
+        # bubble down operation
+        for target in range(len(l)//2-1, -1, -1):
+            cur = target
+            while cur < len(l):
+                biggest = cur
+                left = 2 * cur + 1
+                right = 2 * cur + 2
+
+                # find the biggest
+                if left < len(l) and l[left] > l[biggest]:
+                    biggest = left
+
+                if right < len(l) and l[right] > l[biggest]:
+                    biggest = right
+
+                # stop, do not need to heapify
+                if biggest == cur:
+                    break
+
+                # continue to heapify
+                l[biggest], l[cur] = l[cur], l[biggest]
+                cur = biggest
+
+    if len(l) <= 1:
+        return
+
+    max_heapify(l)
+
+    # from len(l)-1 to 1
+    for last in range(len(l)-1, 0, -1):
+        # swap the max to the current last index
+        # bubble down operation
+        l[0], l[last] = l[last], l[0]
+        cur = 0
+        while cur < last:
+            biggest = cur
+            left = cur * 2 + 1
+            right = cur * 2 + 2
+
+            if left < last and l[left] > l[biggest]:
+                biggest = left
+
+            if right < last and l[right] > l[biggest]:
+                biggest = right
+
+            # stop, do not need to heapify
+            if biggest == cur:
+                break
+
+            # continue to heapify
+            l[biggest], l[cur] = l[cur], l[biggest]
+            cur = biggest
+
+
 def wiggle_sort(l: list) -> None:
     """
     nums[0] <= nums[1] >= nums[2] <= nums[3]
@@ -457,9 +516,9 @@ def insertion_sort_recursive(l: list) -> None:
 
 
 def main():
-    data = [i for i in range(10, 0, -1)]
+    data = [i for i in range(10, -1, -1)]
     print(data)
-    merge_sort_v2(data)
+    heap_sort(data)
     print(data)
 
 

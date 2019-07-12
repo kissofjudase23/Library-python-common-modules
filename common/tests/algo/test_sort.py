@@ -38,7 +38,8 @@ class TestSorting(object):
                               SORT.selection_sort,
                               SORT.selection_sort_recursive,
                               SORT.bubble_sort,
-                              SORT.bubble_sort_resursive]
+                              SORT.bubble_sort_resursive,
+                              SORT.heap_sort]
 
         for algo in sorting_algorithms:
             actual = target.copy()
