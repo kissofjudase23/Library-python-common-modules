@@ -160,3 +160,61 @@ class StrUtils(object):
                 odd_cnt += 1
 
         return odd_cnt <= 1
+
+    @staticmethod
+    def get_lps(pattern):
+
+        # init lps array
+        lps = [None] * len(pattern)
+        lps[0] = 0
+
+        p = 0  # prefix pointer
+        s = 1  # suffix pointer
+
+        while s < len(pattern):
+            if pattern[s] == pattern[p]:
+                p += 1
+                lps[s] = p  # update suffix length
+                s += 1
+            else:
+                if p != 0:
+                    # backward the prefix pointer to the position
+                    # after the matched prefix/suffix string
+                    p = lps[p-1]
+                else:
+                    # do not match anything
+                    lps[s] = 0
+                    s += 1
+        return lps
+
+    @staticmethod
+    def is_substring(s, pattern):
+        """ Use KMP algorithm
+        Time:  O(m+n), where m is length of s and n is the length os pattern.
+        Space: O(n)
+        Reference:
+        https://www.youtube.com/watch?v=GTJr8OvyEVQ
+        http://jakeboxer.com/blog/2009/12/13/the-knuth-morris-pratt-algorithm-in-my-own-words/
+        """
+        if not pattern or len(pattern) == 0:
+            return 0
+
+        lps = StrUtils.get_lps(pattern)
+        i = j = 0
+        res = -1
+        while i < len(s):
+            if s[i] == pattern[j]:
+                i += 1
+                j += 1
+                if j == len(pattern):
+                    res = i - j
+                    break
+            else:
+                if j != 0:
+                    # backward the prefix pointer to the position
+                    # after the matched prefix/suffix string
+                    j = lps[j-1]
+                else:
+                    # do not match anything
+                    i += 1
+        return res

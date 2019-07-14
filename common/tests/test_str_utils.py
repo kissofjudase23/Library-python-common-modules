@@ -109,4 +109,13 @@ class TestEncodeFormatter(object):
         actual = StrUtils.is_palindrome_permutation(s)
         assert actual is expected
 
-
+    @pytest.mark.parametrize('s, pattern, expected', [
+        pytest.param('aaaaaaaaaaab', 'aaaaab', 6),
+        pytest.param('aaab', 'aaab', 0),
+        pytest.param('aaab', 'aaac', -1),
+        pytest.param('aaab', '', 0),
+        pytest.param('aaab', None, 0)
+    ])
+    def test_substring(self, s, pattern, expected):
+        actual = StrUtils.is_substring(s, pattern)
+        assert actual == expected
