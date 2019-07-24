@@ -1,4 +1,5 @@
 from collections import defaultdict
+from pprint import pprint as pp
 
 from .exc import ArgError
 
@@ -218,3 +219,57 @@ class StrUtils(object):
                     # do not match anything
                     i += 1
         return res
+
+    @staticmethod
+    def lcs(s1, s2):
+        # Ref: https://www.youtube.com/watch?v=NnD96abizww
+        # Time: O(n^2), Space: O(n^2)
+        if not s1 or not s2:
+            return 0
+
+        l1, l2 = len(s1), len(s2)
+        # memo[i][j]
+        # The longest common subsequence betwwen s1[0:i+1] and s2[0:j+1]
+        memo = [[0 for _ in range(l2)] for _ in range(l1)]
+
+        if s1[0] == s2[0]:
+            memo[0][0] = 1
+
+        # init first row
+        for j in range(1, l2):
+            if memo[0][j-1] or s1[0] == s2[j]:
+                memo[0][j] = 1
+
+        # init first column
+        for i in range(1, l1):
+            if memo[i-1][0] or s1[i] == s2[0]:
+                memo[i][0] = 1
+
+        for i in range(1, l1):
+            for j in range(1, l2):
+                if s1[i] == s2[j]:
+                    memo[i][j] = memo[i-1][j-1] + 1
+                else:
+                    memo[i][j] = max(memo[i-1][j], memo[i][j-1])
+
+        # traverse the lcs array to find subsequence
+        lcs_cnt = memo[l1-1][l2-1]
+        i, j = l1-1, l2-1
+        lcs = list()
+        while lcs_cnt:
+            if s1[i] == s2[j]:
+                lcs.append(s1[i])
+                i -= 1
+                j -= 1
+                lcs_cnt -= 1
+            else:
+                if memo[i][j] == memo[i-1][j]:
+                    i -= 1
+                else:  # memo[i][j] == memo[i][j-1]
+                    j -= 1
+
+        return ''.join(lcs[::-1])
+
+
+if __name__ == "__main__":
+    print(StrUtils.lcs('acbcf', 'abcdaf'))
