@@ -119,3 +119,11 @@ class TestEncodeFormatter(object):
     def test_substring(self, s, pattern, expected):
         actual = StrUtils.is_substring(s, pattern)
         assert actual == expected
+
+    @pytest.mark.parametrize('s1, s2, expected', [
+        pytest.param('aaaa', 'aaaa', 'aaaa'),
+        pytest.param('acbcf', 'abcdaf', 'abcf')
+    ])
+    def test_lcs(self, s1, s2, expected):
+        actual = StrUtils.lcs(s1, s2)
+        assert actual == expected
