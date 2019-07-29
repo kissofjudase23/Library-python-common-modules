@@ -2,15 +2,15 @@ import sys
 import collections
 
 
-def check_wiggle(l: list) -> None:
+def check_wiggle(array: list) -> None:
     less = True
     # This is a greedy algorithm
-    for i in range(0, len(l)-1):
+    for i in range(0, len(array)-1):
         if less:
-            if l[i] > l[i+1]:
+            if array[i] > array[i+1]:
                 return False
         else:
-            if l[i] < l[i+1]:
+            if array[i] < array[i+1]:
                 return False
 
         less = not less
@@ -18,9 +18,9 @@ def check_wiggle(l: list) -> None:
     return True
 
 
-def heap_sort(l: list) -> None:
+def heap_sort(array: list) -> None:
 
-    def max_heapify(l: list, cur, boundary):
+    def max_heapify(array: list, cur, boundary):
         # bubble down operation
         while cur < boundary:
             biggest = cur
@@ -28,10 +28,10 @@ def heap_sort(l: list) -> None:
             right = 2 * cur + 2
 
             # find the biggest
-            if left < boundary and l[left] > l[biggest]:
+            if left < boundary and array[left] > array[biggest]:
                 biggest = left
 
-            if right < boundary and l[right] > l[biggest]:
+            if right < boundary and array[right] > array[biggest]:
                 biggest = right
 
             # stop, do not need to heapify
@@ -39,42 +39,42 @@ def heap_sort(l: list) -> None:
                 break
 
             # continue to heapify
-            l[biggest], l[cur] = l[cur], l[biggest]
+            array[biggest], array[cur] = array[cur], array[biggest]
             cur = biggest
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    # bottom up heapify from len(l)//2-1 to 0 (skip the nodes on last level)
-    for target in range(len(l)//2-1, -1, -1):
-        max_heapify(l=l, cur=target, boundary=len(l))
+    # bottom up heapify from len(array)//2-1 to 0 (skip the nodes on last level)
+    for target in range(len(array)//2-1, -1, -1):
+        max_heapify(array=array, cur=target, boundary=len(array))
 
-    # from len(l)-1 to 1
-    for boundary in range(len(l)-1, 0, -1):
+    # from len(array)-1 to 1
+    for boundary in range(len(array)-1, 0, -1):
         # swap the max to the current last index
-        l[0], l[boundary] = l[boundary], l[0]
+        array[0], array[boundary] = array[boundary], array[0]
         # heapify
-        max_heapify(l=l, cur=0, boundary=boundary)
+        max_heapify(array=array, cur=0, boundary=boundary)
 
 
-def wiggle_sort(l: list) -> None:
+def wiggle_sort(array: list) -> None:
     """
     nums[0] <= nums[1] >= nums[2] <= nums[3]
     Time Complexity: O(n)
     """
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
     less = True
 
     # This is a greedy algorithm
-    for i in range(0, len(l)-1):
+    for i in range(0, len(array)-1):
         if less:
-            if l[i] > l[i+1]:
-                l[i], l[i+1] = l[i+1], l[i]
+            if array[i] > array[i+1]:
+                array[i], array[i+1] = array[i+1], array[i]
         else:
-            if l[i] < l[i+1]:
-                l[i], l[i+1] = l[i+1], l[i]
+            if array[i] < array[i+1]:
+                array[i], array[i+1] = array[i+1], array[i]
 
         less = not less
 
@@ -110,7 +110,7 @@ def _merge_two_sorted_list(dst: list, *, dst_start: int,
         merge_runner += 1
 
 
-def merge_sort(l: list) -> None:
+def merge_sort(array: list) -> None:
     """
     Time Complexity: O(nlog(n))
         log(n) round (window size),
@@ -122,31 +122,31 @@ def merge_sort(l: list) -> None:
     window_size = 1
 
     # windows_size: [1, 2 ,4 ,8 ,16 ...] which means the sorted list unit
-    while window_size <= (len(l) - 1):
+    while window_size <= (len(array) - 1):
         # windows_size:1, start:[0, 2, 4, 6, 8]
         # windows_size:2, start:[0, 4, 8]
         # windows_size:4: start:[0, 8]
         start = 0
-        while (start + window_size) < len(l):
+        while (start + window_size) < len(array):
             """
             Python slice can help to handle out of range issues
             for example:
-                l = [1, 2 ,3]
-                l[1:100] = [2, 3]
-                l[100:] = []
-                l[100:10] = []
+                array = [1, 2 ,3]
+                array[1:100] = [2, 3]
+                array[100:] = []
+                array[100:10] = []
             So the code from line59 to line66 can be refactored as following
             mid = start + windows_size   # do not need to check range
             end = mid + windows_size  # do not need to check range
-            left_window = l[start:mid]
-            right_window = l[mid:end]
+            left_window = array[start:mid]
+            right_window = array[mid:end]
             """
             mid = start + window_size - 1
             end = start + 2*window_size - 1
-            if end > (len(l) - 1):
-                end = (len(l) - 1)
+            if end > (len(array) - 1):
+                end = (len(array) - 1)
 
-            _merge_two_sorted_list(dst=l, dst_start=start,
+            _merge_two_sorted_list(dst=array, dst_start=start,
                                    left_start=start, left_end=mid,
                                    right_start=mid+1, right_end=end)
 
@@ -155,13 +155,13 @@ def merge_sort(l: list) -> None:
         window_size *= 2  # outer loop
 
 
-def merge_sort_recursive(l: list) -> None:
+def merge_sort_recursive(array: list) -> None:
     """
     Time  Complexity: O(nlog(n)), T(n) = 2T(n/2) + n
     Sapce Complexity: O(n), extra space for array copy (_merge_two_sorted_list)
     Stable sorting
     """
-    def _merge_sort_recursive(l, start, end):
+    def _merge_sort_recursive(array, start, end):
 
         if start >= end:
             return
@@ -170,17 +170,17 @@ def merge_sort_recursive(l: list) -> None:
 
         # print(f'start:{start}, mid:{mid}, end:{end}')
 
-        _merge_sort_recursive(l, start, mid)
-        _merge_sort_recursive(l, mid+1, end)
+        _merge_sort_recursive(array, start, mid)
+        _merge_sort_recursive(array, mid+1, end)
 
-        _merge_two_sorted_list(dst=l, dst_start=start,
+        _merge_two_sorted_list(dst=array, dst_start=start,
                                left_start=start, left_end=mid,
                                right_start=mid+1, right_end=end)
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    _merge_sort_recursive(l=l, start=0, end=len(l)-1)
+    _merge_sort_recursive(array=array, start=0, end=len(array)-1)
 
 
 def _merge_two_sorted_list_v2(dst: list, dst_start: int,
@@ -210,7 +210,7 @@ def _merge_two_sorted_list_v2(dst: list, dst_start: int,
         merge_runner += 1
 
 
-def merge_sort_v2(l: list) -> None:
+def merge_sort_v2(array: list) -> None:
     """
     Time Complexity: O(nlog(n))
         log(n) round (window size),
@@ -222,34 +222,34 @@ def merge_sort_v2(l: list) -> None:
     window_size = 1
 
     # windows_size: [1, 2 ,4 ,8 ,16 ...] which means the sorted list unit
-    while window_size <= (len(l) - 1):
+    while window_size <= (len(array) - 1):
         # windows_size:1, start:[0, 2, 4, 6, 8]
         # windows_size:2, start:[0, 4, 8]
         # windows_size:4: start:[0, 8]
         start = 0
-        while (start + window_size) < len(l):
+        while (start + window_size) < len(array):
             """
             Python slice can help to handle out of range issues
             for example:
-                l = [1, 2 ,3]
-                l[1:100] = [2, 3]
-                l[100:] = []
-                l[100:10] = []
+                array = [1, 2 ,3]
+                array[1:100] = [2, 3]
+                array[100:] = []
+                array[100:10] = []
             So the code from line59 to line66 can be refactored as following
             mid = start + windows_size   # do not need to check range
             end = mid + windows_size  # do not need to check range
-            left_window = l[start:mid]
-            right_window = l[mid:end]
+            left_window = array[start:mid]
+            right_window = array[mid:end]
             """
             mid = start + window_size
             end = mid + window_size
-            if end > len(l):
-                end = len(l)
+            if end > len(array):
+                end = len(array)
 
-            left_window = l[start:mid]
-            right_window = l[mid:end]
+            left_window = array[start:mid]
+            right_window = array[mid:end]
 
-            _merge_two_sorted_list_v2(dst=l, dst_start=start,
+            _merge_two_sorted_list_v2(dst=array, dst_start=start,
                                       left_window=left_window,
                                       right_window=right_window)
 
@@ -258,52 +258,48 @@ def merge_sort_v2(l: list) -> None:
         window_size *= 2  # outer loop
 
 
-def merge_sort_recursive_v2(l: list) -> None:
+def merge_sort_recursive_v2(array: list) -> None:
     """
     Time  Complexity: O(nlog(n)), T(n) = 2T(n/2) + n
     Sapce Complexity: O(n), extra space for array copy (_merge_two_sorted_list)
     Stable sorting
     """
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    mid = len(l)//2
+    mid = len(array)//2
 
-    left_window = l[0:mid]
-    right_window = l[mid:len(l)]
+    left_window = array[0:mid]
+    right_window = array[mid:len(array)]
 
     merge_sort_recursive_v2(left_window)
     merge_sort_recursive_v2(right_window)
 
-    _merge_two_sorted_list_v2(dst=l, dst_start=0,
+    _merge_two_sorted_list_v2(dst=array, dst_start=0,
                               left_window=left_window,
                               right_window=right_window)
 
 
-def _get_partition(l: list, start, end) -> None:
+def _get_partition(array: list, start, end) -> None:
     border = start
 
     # use median of three to determine pivot can get rid of worst cases
     pivot = end
 
-    # print(f'start:{start}, end:{end}, pivot:{pivot}, l[pivot]:{l[pivot]}, l:{l}')
-
     # find the border
     for compare in range(start, end):
-        if l[compare] <= l[pivot]:
-            l[border], l[compare] = l[compare], l[border]
+        if array[compare] <= array[pivot]:
+            array[border], array[compare] = array[compare], array[border]
             border += 1
 
     # switch the pivot to the border
-    l[border], l[pivot] = l[pivot], l[border]
-
-    # print(f'border:{border}, l:{l}')
+    array[border], array[pivot] = array[pivot], array[border]
 
     return border
 
 
-def quick_sort(l: list) -> None:
+def quick_sort(array: list) -> None:
     """
     Time Complexity: O(nlog(n))
     Sapce Complexity: O(1)
@@ -312,34 +308,32 @@ def quick_sort(l: list) -> None:
     2. https://stackoverflow.com/questions/39666714/quick-sort-implement-by-queue
     """
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
     start = 0
-    end = len(l) - 1
+    end = len(array) - 1
     stack = list()
 
     Pair = collections.namedtuple('Pair', ['start', 'end'])
-
-    # The first pirt
     stack.append(Pair(start=start, end=end))
 
     while len(stack):
         pair = stack.pop()
         start, end = pair.start, pair.end
 
-        pivot = _get_partition(l, start, end)
+        pivot = _get_partition(array, start, end)
 
-        # start partition
+        # left partition
         if start < pivot - 1:
             stack.append(Pair(start=start, end=pivot-1))
 
-        # end partition
+        # right partition
         if pivot + 1 < end:
             stack.append(Pair(start=pivot + 1, end=end))
 
 
-def quick_sort_recursive(l: list) -> None:
+def quick_sort_recursive(array: list) -> None:
     """
     Time Complexity:  O(nlog(n))
     Sapce Complexity: O(log(n)) ~ O(n)
@@ -347,159 +341,208 @@ def quick_sort_recursive(l: list) -> None:
     1. https://www.geeksforgeeks.org/python-program-for-quicksort/
     2. https://www.youtube.com/watch?v=CB_NCoxzQnk
     """
-    def _quick_sort_recursive(l, start, end):
+    def _quick_sort_recursive(array, start, end):
 
         if start >= end:
             return
 
-        pivot = _get_partition(l, start, end)
+        pivot = _get_partition(array, start, end)
         # start part
-        _quick_sort_recursive(l, start, pivot-1)
+        _quick_sort_recursive(array, start, pivot-1)
         # end part
-        _quick_sort_recursive(l, pivot+1, end)
+        _quick_sort_recursive(array, pivot+1, end)
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    _quick_sort_recursive(l=l, start=0, end=len(l) - 1)
+    _quick_sort_recursive(array=array, start=0, end=len(array) - 1)
 
 
-def bubble_sort(l: list) -> None:
+def bubble_sort(array: list) -> None:
     """
-    Time:  O(n^2)
+    Time:  O(n^2), Best Case is O(n)
     Space: O(1)
     """
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    # bubble in len(l)-1 to 1
-    for bubble in range(len(l)-1, 0, -1):
+    # bubble in len(array)-1 to 1
+    for bubble in range(len(array)-1, 0, -1):
         is_swap = False
         for compare in range(0, bubble):
-            if l[compare] > l[compare + 1]:
-                l[compare], l[compare+1] = l[compare+1], l[compare]
+            if array[compare] > array[compare + 1]:
+                array[compare], array[compare+1] = array[compare+1], array[compare]
                 is_swap = True
         if not is_swap:
             break
 
 
-def bubble_sort_resursive(l: list) -> None:
+def bubble_sort_resursive(array: list) -> None:
     """
     Time:  O(n^2)
     Space: O(n)
     """
 
-    def _bubble_sort_resursive(l, bubble):
+    def _bubble_sort_resursive(array, bubble):
 
-        if bubble > len(l) - 1:
+        if bubble > len(array) - 1:
             return
 
-        _bubble_sort_resursive(l, bubble + 1)
+        _bubble_sort_resursive(array, bubble + 1)
 
         for compare in range(0, bubble):
-            if l[compare] > l[compare + 1]:
-                l[compare], l[compare+1] = l[compare+1], l[compare]
+            if array[compare] > array[compare + 1]:
+                array[compare], array[compare+1] = array[compare+1], array[compare]
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    _bubble_sort_resursive(l=l, bubble=1)
+    _bubble_sort_resursive(array=array, bubble=1)
 
 
-def selection_sort(l: list) -> None:
+def selection_sort(array: list) -> None:
     """
     Time:  O(n^2)
     Space: O(1)
     """
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
     # from 0 to len - 2
-    for select in range(0, len(l)-1):
+    for select in range(0, len(array)-1):
         minimum = select
         # from select + 1 to len - 1
-        for compare in range(select + 1, len(l)):
-            if l[compare] < l[minimum]:
+        for compare in range(select + 1, len(array)):
+            if array[compare] < array[minimum]:
                 minimum = compare
 
-        if select != minimum:
-            l[select], l[minimum] = l[minimum], l[select]
+        if minimum != select:
+            array[select], array[minimum] = array[minimum], array[select]
 
 
-def selection_sort_recursive(l: list) -> None:
+def selection_sort_recursive(array: list) -> None:
     """
     Time:  O(n^2)
     Space: O(n)
     """
-    def _selection_sort_recursive(l, select):
+    def _selection_sort_recursive(array, select):
 
         if select < 0:
             return
 
-        _selection_sort_recursive(l, select - 1)
+        _selection_sort_recursive(array, select - 1)
 
         minimum = select
-        for compare in range(select + 1, len(l)):
-            if l[compare] < l[minimum]:
+        for compare in range(select + 1, len(array)):
+            if array[compare] < array[minimum]:
                 minimum = compare
 
         if select != minimum:
-            l[select], l[minimum] = l[minimum], l[select]
+            array[select], array[minimum] = array[minimum], array[select]
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    _selection_sort_recursive(l, select=len(l)-2)
+    _selection_sort_recursive(array, select=len(array)-2)
 
 
-def insertion_sort(l: list) -> None:
+def insertion_sort(array: list) -> None:
     """
-    Time:  O(n^2)
+    Time:  O(n^2), best case O(n)
     Space: O(1)
     """
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    for insert in range(1, len(l)):
+    for insert in range(1, len(array)):
         # compare from new-1 to 0
         for compare in range(insert-1, -1, -1):
-            if l[compare] <= l[compare + 1]:
+            if array[compare] <= array[compare + 1]:
                 break
             else:
-                l[compare], l[compare+1] = l[compare+1], l[compare]
+                array[compare], array[compare+1] = array[compare+1], array[compare]
 
 
-def insertion_sort_recursive(l: list) -> None:
+def insertion_sort_recursive(array: list) -> None:
     """
     Time:  O(n^2)
     Space: O(n)
     """
 
-    def _insertion_sort_recursive(l, insert):
+    def _insertion_sort_recursive(array, insert):
 
         if insert < 1:
             return
 
-        _insertion_sort_recursive(l, insert-1)
+        _insertion_sort_recursive(array, insert-1)
         # compare from new-1 to 0
         for compare in range(insert-1, -1, -1):
-            if l[compare] <= l[compare + 1]:
+            if array[compare] <= array[compare + 1]:
                 break
             else:
-                l[compare], l[compare+1] = l[compare+1], l[compare]
+                array[compare], array[compare+1] = array[compare+1], array[compare]
 
-    if len(l) <= 1:
+    if len(array) <= 1:
         return
 
-    _insertion_sort_recursive(l, insert=len(l)-1)
+    _insertion_sort_recursive(array, insert=len(array)-1)
+
+
+def counting_sort(array: list):
+    """
+    Ref: https://www.youtube.com/watch?v=OKd534EWcdk
+    Time: O(n+k)
+    Space: O(n+k)
+    """
+
+    offset_arr = [0] * 256
+    sorted_arr = [None] * len(array)
+
+    # calculate occurrence count of each character
+    for c in array:
+        offset_arr[ord(c)] += 1
+
+    # accumulation
+    for i in range(1, len(offset_arr)):
+        offset_arr[i] = offset_arr[i] + offset_arr[i-1]
+
+    # from n-1 to 1
+    for i in range(len(offset_arr)-1, 1, -1):
+        offset_arr[i] = offset_arr[i-1]
+
+    # put c to the right place according to index array
+    for c in array:
+        idx = ord(c)
+        sorted_arr[offset_arr[idx]] = c
+        offset_arr[idx] += 1
+
+    return sorted_arr
+
+
+def bucket_sort():
+    """
+    Ref:
+    https://www.youtube.com/watch?v=VuXbEb5ywrU
+    https://www.geeksforgeeks.org/bucket-sort-2/
+    """
+    pass
+
+
+def radix_sort():
+    """
+    Ref:
+    https://www.youtube.com/watch?v=XiuSW_mEn7g
+    https://www.geeksforgeeks.org/radix-sort/
+    Time:  O(r*(n+k))
+    Space: O(n+k)
+    """
+    pass
 
 
 def main():
-    data = [i for i in range(10, -1, -1)]
-    print(data)
-    heap_sort(data)
-    print(data)
+    array = "bbccaadd"
+    print(counting_sort(array))
 
 
 if __name__ == '__main__':
