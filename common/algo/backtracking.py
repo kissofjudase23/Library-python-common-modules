@@ -198,29 +198,24 @@ def combin_iter_v2(n: int, k: int) -> List[List[int]]:
     """
     Ref: https://leetcode.com/problems/combinations/discuss/27029/AC-Python-backtracking-iterative-solution-60-ms
     Time: O(k* n!/(n!*(n-k)!))
-    Space: O(n!/(n!*(n-k)!))   (extrac space O(k))
+    Space: O(n!/(n!*(n-k)!))   (extra space: O(k))
     """
     comb = []
     cur = []
     start = 1
-
     while True:
         l = len(cur)
-
         if l == k:
             comb.append(cur[:])
-
         # k - l > n - start + 1 means that l will not satisfy k in the future
         # in fact, (k - l) > (n - start + 1)  can cover start > n when (l-k) = -1
         if l == k or (k - l) > (n - start + 1) or start > n:
             if not cur:
                 break
             start = cur.pop() + 1
-
         else:
             cur.append(start)
             start += 1
-
     return comb
 
 
