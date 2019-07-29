@@ -73,6 +73,13 @@ class Trie(object):
         """
         return self._search(word=word, is_prefix=False)
 
+    def starts_with(self, prefix: str) -> bool:
+        """
+        Returns if there is any word in the trie that starts with the given prefix.
+        Time: O(len(word))
+        """
+        return self._search(word=prefix, is_prefix=True)
+
     def search_with_wildcard(self, word: str) -> bool:
         """
         search(word) can search a literal word or a regular expression string containing only letters
@@ -81,20 +88,23 @@ class Trie(object):
         stack = list()
         stack.append([self.root, 0])
         word_len = len(word)
-
         # use DFS
         while stack:
             node, index = stack.pop()
+
             if index == word_len:
                 if node.end_of_word:
                     return True
+                # continue rather than return False here
                 continue
+
             c = word[index]
             if c == '.':
                 for _, child in node.children.items():
                     stack.append([child, index+1])
             else:
                 child = node.children.get(c)
+                # continue rather than return False here
                 if not child:
                     continue
                 stack.append([child, index+1])
@@ -113,10 +123,11 @@ class Trie(object):
             c = word[index]
             if c == '.':
                 for _, child in node.children.items():
-                    res = _search_with_wildcard_recursive(child, word, index+1)
-                    if res:
+                    if (_search_with_wildcard_recursive(child, word, index+1)):
                         return True
-                    continue
+                    else:
+                        continue
+
                 return False
             else:
                 child = node.children.get(c)
@@ -127,13 +138,6 @@ class Trie(object):
         return _search_with_wildcard_recursive(node=self.root,
                                                word=word,
                                                index=0)
-
-    def starts_with(self, prefix: str) -> bool:
-        """
-        Returns if there is any word in the trie that starts with the given prefix.
-        Time: O(len(word))
-        """
-        return self._search(word=prefix, is_prefix=True)
 
     def search_recursive(self, word: str) -> bool:
         """
@@ -180,7 +184,10 @@ class Trie(object):
         while should_delete_child and stack:
             pair = stack.pop()
             parent, child_c = pair.parent, pair.child_c
+
+            # delete the child
             parent.childrent.pop(child_c)
+
             # delete the node only when there is no children
             should_delete_child = not parent.childrent
 
