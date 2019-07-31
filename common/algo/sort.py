@@ -1,5 +1,6 @@
 import sys
 import collections
+import random
 
 
 def check_wiggle(array: list) -> None:
@@ -279,9 +280,13 @@ def merge_sort_recursive_v2(array: list) -> None:
 
 
 def _get_partition(array: list, start, end) -> None:
-    border = start
 
-    # use median of three to determine pivot can get rid of worst cases
+    # to avoid worst case
+    # use random or meian or three
+    pivot_ran = random.randint(start, end)
+    array[pivot_ran], array[end] = array[end], array[pivot_ran]
+
+    border = start
     pivot = end
     pivot_val = array[pivot]
 
@@ -300,7 +305,7 @@ def _get_partition(array: list, start, end) -> None:
 def quick_sort(array: list) -> None:
     """
     Time Complexity: O(nlog(n))
-    Sapce Complexity: O(1)
+    Sapce Complexity: O(log(n))
     Ref:
     1. https://www.techiedelight.com/iterative-implementation-of-quicksort/
     2. https://stackoverflow.com/questions/39666714/quick-sort-implement-by-queue
@@ -332,6 +337,10 @@ def quick_sort(array: list) -> None:
 
 
 def quick_select(array, start, end, k_smallest):
+    """
+    Time Complexity: O(n)
+    Sapce Complexity: O(1)
+    """
 
     if k_smallest > len(array):
         return -1  # out of index
