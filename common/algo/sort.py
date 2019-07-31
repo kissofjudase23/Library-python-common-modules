@@ -283,11 +283,12 @@ def _get_partition(array: list, start, end) -> None:
 
     # use median of three to determine pivot can get rid of worst cases
     pivot = end
+    pivot_val = array[pivot]
 
     # find the border
-    for compare in range(start, end):
-        if array[compare] <= array[pivot]:
-            array[border], array[compare] = array[compare], array[border]
+    for cur in range(start, end):
+        if array[cur] <= pivot_val:
+            array[border], array[cur] = array[cur], array[border]
             border += 1
 
     # switch the pivot to the border
@@ -328,6 +329,23 @@ def quick_sort(array: list) -> None:
         # right partition
         if pivot + 1 < end:
             stack.append(Pair(start=pivot + 1, end=end))
+
+
+def quick_select(array, start, end, k_smallest):
+
+    if k_smallest > len(array):
+        return -1  # out of index
+
+    while start <= end:
+
+        pivot = _get_partition(array, start, end)
+
+        if k_smallest == pivot:
+            return array[pivot]
+        elif k_smallest < pivot:
+            end = pivot - 1
+        else:
+            start = pivot + 1
 
 
 def quick_sort_recursive(array: list) -> None:
@@ -504,6 +522,10 @@ def counting_sort(array: list):
     for i in range(1, len(offset_arr)):
         offset_arr[i] = offset_arr[i] + offset_arr[i-1]
 
+    """
+    or we can traverse the offset_arr and count to populate the original array
+    """
+
     # from n-1 to 1
     for i in range(len(offset_arr)-1, 1, -1):
         offset_arr[i] = offset_arr[i-1]
@@ -515,6 +537,25 @@ def counting_sort(array: list):
         offset_arr[idx] += 1
 
     return sorted_arr
+
+
+def counting_sort_in_place(array: list):
+    """
+    Time: O(n+k)
+    Space: O(k)
+    """
+
+    cnt_arr = [0] * 256
+
+    # calculate occurrence count of each character
+    for c in array:
+        cnt_arr[ord(c)] += 1
+
+    p = 0
+    for idx, cnt in enumerate(cnt_arr):
+        for _ in range(cnt):
+            array[p] = chr(idx)
+            p += 1
 
 
 def bucket_sort():
@@ -538,8 +579,10 @@ def radix_sort():
 
 
 def main():
-    array = "bbccaadd"
+    array = list("bbccaadd")
     print(counting_sort(array))
+    counting_sort_in_place(array)
+    print(array)
 
 
 if __name__ == '__main__':
