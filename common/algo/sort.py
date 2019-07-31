@@ -204,10 +204,7 @@ def _merge_two_sorted_list_v2(dst: list, dst_start: int,
         left_runner += 1
         merge_runner += 1
 
-    while right_runner < len(right_window):
-        dst[merge_runner] = right_window[right_runner]
-        right_runner += 1
-        merge_runner += 1
+    # right window already in dst
 
 
 def merge_sort_v2(array: list) -> None:
