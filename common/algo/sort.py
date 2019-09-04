@@ -114,8 +114,7 @@ def _merge_two_sorted_list(dst: list, *, dst_start: int,
 def merge_sort(array: list) -> None:
     """
     Time Complexity: O(nlog(n))
-        log(n) round (window size),
-        n in each round (merge sorted lists) => total nlong(n)
+        total log(n) rounds (window size), each round takes O(n) operations
     Sapce Complexity: O(n), extra space to array copy
     Stable sorting
     """
@@ -184,104 +183,12 @@ def merge_sort_recursive(array: list) -> None:
     _merge_sort_recursive(array=array, start=0, end=len(array)-1)
 
 
-def _merge_two_sorted_list_v2(dst: list, dst_start: int,
-                              left_window: list,
-                              right_window: list) -> None:
-
-    merge_runner = dst_start
-    left_runner = right_runner = 0
-
-    while left_runner < len(left_window) and right_runner < len(right_window):
-        if left_window[left_runner] <= right_window[right_runner]:
-            dst[merge_runner] = left_window[left_runner]
-            left_runner += 1
-        else:
-            dst[merge_runner] = right_window[right_runner]
-            right_runner += 1
-        merge_runner += 1
-
-    while left_runner < len(left_window):
-        dst[merge_runner] = left_window[left_runner]
-        left_runner += 1
-        merge_runner += 1
-
-    # right window already in dst
-
-
-def merge_sort_v2(array: list) -> None:
-    """
-    Time Complexity: O(nlog(n))
-        log(n) round (window size),
-        n in each round (merge sorted lists) => total nlong(n)
-    Sapce Complexity: O(n), extra space to array copy
-    Stable sorting
-    """
-
-    window_size = 1
-
-    # windows_size: [1, 2 ,4 ,8 ,16 ...] which means the sorted list unit
-    while window_size <= (len(array) - 1):
-        # windows_size:1, start:[0, 2, 4, 6, 8]
-        # windows_size:2, start:[0, 4, 8]
-        # windows_size:4: start:[0, 8]
-        start = 0
-        while (start + window_size) < len(array):
-            """
-            Python slice can help to handle out of range issues
-            for example:
-                array = [1, 2 ,3]
-                array[1:100] = [2, 3]
-                array[100:] = []
-                array[100:10] = []
-            So the code from line59 to line66 can be refactored as following
-            mid = start + windows_size   # do not need to check range
-            end = mid + windows_size  # do not need to check range
-            left_window = array[start:mid]
-            right_window = array[mid:end]
-            """
-            mid = start + window_size
-            end = mid + window_size
-            if end > len(array):
-                end = len(array)
-
-            left_window = array[start:mid]
-            right_window = array[mid:end]
-
-            _merge_two_sorted_list_v2(dst=array, dst_start=start,
-                                      left_window=left_window,
-                                      right_window=right_window)
-
-            start += (2*window_size)  # inner loop
-
-        window_size *= 2  # outer loop
-
-
-def merge_sort_recursive_v2(array: list) -> None:
-    """
-    Time  Complexity: O(nlog(n)), T(n) = 2T(n/2) + n
-    Sapce Complexity: O(n), extra space for array copy (_merge_two_sorted_list)
-    Stable sorting
-    """
-
-    if len(array) <= 1:
-        return
-
-    mid = len(array)//2
-
-    left_window = array[0:mid]
-    right_window = array[mid:len(array)]
-
-    merge_sort_recursive_v2(left_window)
-    merge_sort_recursive_v2(right_window)
-
-    _merge_two_sorted_list_v2(dst=array, dst_start=0,
-                              left_window=left_window,
-                              right_window=right_window)
-
-
 def _get_partition(array: list, start, end) -> None:
+    """
+    O(n), find the correct pivot position
+    """
 
-    # to avoid worst case
+    # To avoid worst case
     # use random or meian or three
     pivot_ran = random.randint(start, end)
     array[pivot_ran], array[end] = array[end], array[pivot_ran]
@@ -304,7 +211,7 @@ def _get_partition(array: list, start, end) -> None:
 
 def quick_sort(array: list) -> None:
     """
-    Time Complexity: O(nlog(n))
+    Time Complexity:  O(nlog(n))
     Sapce Complexity: O(log(n))
     Ref:
     1. https://www.techiedelight.com/iterative-implementation-of-quicksort/
@@ -338,7 +245,7 @@ def quick_sort(array: list) -> None:
 
 def quick_select(array, start, end, k_smallest):
     """
-    Time Complexity: O(n)
+    Time Complexity:  O(n)
     Sapce Complexity: O(1)
     """
 
@@ -555,7 +462,6 @@ def counting_sort_in_place(array: list):
     """
 
     cnt_arr = [0] * 256
-
     # calculate occurrence count of each character
     for c in array:
         cnt_arr[ord(c)] += 1
