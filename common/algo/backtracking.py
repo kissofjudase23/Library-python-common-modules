@@ -219,8 +219,47 @@ def combin_iter_v2(n: int, k: int) -> List[List[int]]:
     return comb
 
 
+def combin_2_recursive(matrix: List[List[str]], k: int) -> List[List[str]]:
+    """
+    Intput:
+        matrix = {{"ptt","abc"},
+                  {"I"},
+                  {"no"}}
+        k=2
+    Output:
+        {{"ptt", "I"}
+         {"ptt", "no"}
+         {"abc", "I"}
+         {"abc", "no"}
+         {"I", "no"}}
+    """
+    def backtrack(cur, start):
+        if len(cur) == k:
+            combs.append(cur[:])
+            return
+
+        if start == n:
+            return
+
+        for i in range(start, n):
+            for e in matrix[i]:
+                cur.append(e)
+                backtrack(cur, i+1)
+                cur.pop()
+
+    if not matrix or not matrix[0]:
+        return []
+
+    n = len(matrix)
+    combs = []
+    cur = []
+    backtrack(cur, 0)
+    return combs
+
+
 def main():
-    pp(combin_iter_v2(4, 3))
+    matrix = [["ptt", "abc"], ["I"], ["NO"]]
+    pp(combin_2_recursive(matrix, k=2))
 
 
 if __name__ == "__main__":
