@@ -73,7 +73,7 @@ class ArrayUtils(object):
         for layer in range(layers):
             start = layer
             end = dim - 1 - layer
-            
+
             for offset in range(end-start):
                 tmp = a[start][start+offset]
                 a[start][start+offset] = a[end-offset][start]
