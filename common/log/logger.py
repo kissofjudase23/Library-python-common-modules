@@ -14,9 +14,15 @@ class LogMode(IntEnum):
 
 class LogFactory(object):
     _SYSLOG_SOCKET = "/dev/log"
-    _FORMATTER = logging.Formatter("[%(asctime)-15s] [%(levelname)-6s] [%(message)s]")
+    # Ref: https://docs.python.org/3/library/logging.html#logrecord-attributes
+    _FORMATTER = logging.Formatter("[%(asctime)s] [%(levelname)s] [%(name)s] "
+                                   "[%(filename)s:%(funcName)s:%(lineno)d] "
+                                   "[%(message)s]")
+
     _JSON_FORMATTER = logging.Formatter(
-        "{'time':'%(asctime)s', 'name': '%(name)s', 'level': '%(levelname)s', 'message': '%(message)s'}")
+        "{'time':'%(asctime)s', 'level':'%(levelname)s', 'logger_name':'%(name)s', "
+        "'file':'%(filename)s:%(funcName)s:%(lineno)d', "
+        "'message': '%(message)s'}")
 
     @classmethod
     def get_logger(cls,
@@ -24,7 +30,8 @@ class LogFactory(object):
                    name,
                    mode=LogMode.CONSOLE,
                    log_level=logging.INFO,
-                   optimize=False,
+                   ignore_process_thread=True,
+                   ignore_src_file=False,
                    suppress_raise=True):
 
         """ custom logger
@@ -36,18 +43,19 @@ class LogFactory(object):
                 log_level:
                     log level for your logger and handlers
                     ex: logging.INFO, logging.DEBUG
-                optimize:
-                    stop collecting extra info to sppeed up
                 suppress_raise:
-                    swallow exceptions while logging, suggest to use this option
+                    Swallow exceptions while logging, suggest to use this option
                     on prod env
             Returns:
                 logger obj
         """
-        if optimize:
-            logging._srcfile = None
+        if ignore_process_thread:
             logging.logThreads = 0
             logging.logProcesses = 0
+
+        if ignore_src_file:
+            # file name/ function/ line number will be None
+            logging._srcfile = None
 
         if suppress_raise:
             logging.raiseExceptions = False
@@ -55,10 +63,11 @@ class LogFactory(object):
         logger = logging.getLogger(name)
         logger.setLevel(log_level)
 
+        # handler log level are different from logger level
         if mode & LogMode.CONSOLE:
             console_handler = logging.StreamHandler()
             console_handler.setLevel(log_level)
-            console_handler.setFormatter(cls._FORMATTER)
+            console_handler.setFormatter(cls._JSON_FORMATTER)
             logger.addHandler(console_handler)
 
         if mode & LogMode.SYSLOG:
