@@ -1,6 +1,6 @@
 import pytest
 
-from ...ds.cache import LRUCache
+from common.ds.cache import LRUCache
 
 
 class TestLRUCache(object):

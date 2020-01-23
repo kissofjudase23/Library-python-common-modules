@@ -1,9 +1,8 @@
 import pytest
 
-from ...ds.linkedlist import LinkedList, DLinkedList, Node
-from ...exc import ArgError
-
-from ...ds import linkedlist as linkedlist
+import common.ds.linkedlist as linkedlist
+from common.ds.linkedlist import LinkedList, DLinkedList, Node
+from common.exc import ArgError
 
 
 class TestLinkedList(object):

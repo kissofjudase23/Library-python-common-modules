@@ -13,13 +13,13 @@ def permutation_rec(nums: List[int]) -> List[List[int]]:
     perms = []
 
     def _permutation(start):
-        if start == len(nums)-1:
+        if start == len(nums) - 1:
             perms.append(nums[:])
             return
 
         for i in range(start, len(nums)):
             nums[start], nums[i] = nums[i], nums[start]
-            _permutation(start=start+1)
+            _permutation(start=start + 1)
             nums[start], nums[i] = nums[i], nums[start]
 
     if not nums:
@@ -45,8 +45,8 @@ def permutation_iter(nums: List[int]) -> List[List[int]]:
         new_perms = []
         for perm in perms:
             # n + 1 position for each perm
-            for b in range(len(perm)+1):
-                new_perms.append(perm[:b]+[nums[i]]+perm[b:])
+            for b in range(len(perm) + 1):
+                new_perms.append(perm[:b] + [nums[i]] + perm[b:])
 
         perms = new_perms
 
@@ -75,7 +75,7 @@ def subsets_rec(nums: List[int]) -> List[List[int]]:
         for i in range(start, len(nums)):
             cur.append(nums[i])
             # !!! start = i =1 rather than start + 1
-            _subsets(cur, start=i+1)
+            _subsets(cur, start=i + 1)
             cur.pop()
 
     subs = []
@@ -159,9 +159,9 @@ def combination_rec(n: int, k: int) -> List[List[int]]:
             return
 
         # from start to n
-        for i in range(start, n+1):
+        for i in range(start, n + 1):
             cur.append(i)
-            _combination(cur=cur, start=i+1)
+            _combination(cur=cur, start=i + 1)
             cur.pop()
 
     comb = []
@@ -189,7 +189,7 @@ def combin_iter(n: int, k: int) -> List[List[int]]:
             comb.append(cur[:])
         else:
             i += 1
-            cur[i] = cur[i-1]
+            cur[i] = cur[i - 1]
 
     return comb
 
@@ -244,7 +244,7 @@ def combin_2_recursive(matrix: List[List[str]], k: int) -> List[List[str]]:
         for i in range(start, n):
             for e in matrix[i]:
                 cur.append(e)
-                backtrack(cur, i+1)
+                backtrack(cur, i + 1)
                 cur.pop()
 
     if not matrix or not matrix[0]:

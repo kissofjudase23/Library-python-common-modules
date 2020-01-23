@@ -53,7 +53,7 @@ def is_palindrome(l):
 
     stack = list()
     odd = True if len % 2 == 1 else False
-    mid = int(math.ceil(float(len/2)))
+    mid = int(math.ceil(float(len / 2)))
     cnt = 0
 
     for v in l:
@@ -136,7 +136,7 @@ def is_palindrome_recursive(l):
         elif len == 0:  # even
             return True, head
 
-        ret, compare = is_palindrome(head.next, len-2)
+        ret, compare = is_palindrome(head.next, len - 2)
         if not ret:
             return False, None
         if head.data == compare.data:
@@ -512,7 +512,7 @@ class LinkedList(LinkedListABC):
             raise ArgError('out of range')
 
         runner = self.head
-        for _ in range(k-1):
+        for _ in range(k - 1):
             runner = runner.next
 
         return runner.data

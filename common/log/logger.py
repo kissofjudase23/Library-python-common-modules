@@ -13,24 +13,21 @@ class LogMode(IntEnum):
 
 
 class LogFactory(object):
-
-    # TODO, output to JASON Format
     _SYSLOG_SOCKET = "/dev/log"
-    _FORMATTER = logging.Formatter(
-        "[%(asctime)s]-[%(levelname)s]"
-        "-[%(name)s]-[%(filename)s:%(lineno)d:%(funcName)s]-[%(message)s]",
-        datefmt="%B %d %H:%M:%S")
+    _FORMATTER = logging.Formatter("[%(asctime)-15s] [%(levelname)-6s] [%(message)s]")
+    _JSON_FORMATTER = logging.Formatter(
+        "{'time':'%(asctime)s', 'name': '%(name)s', 'level': '%(levelname)s', 'message': '%(message)s'}")
 
     @classmethod
     def get_logger(cls,
+                   *,
                    name,
                    mode=LogMode.CONSOLE,
                    log_level=logging.INFO,
                    optimize=False,
                    suppress_raise=True):
 
-        """ custom logger for postman
-
+        """ custom logger
             Args:
                 name:
                     name of your logger, use __name__ as a module level logger
@@ -40,7 +37,7 @@ class LogFactory(object):
                     log level for your logger and handlers
                     ex: logging.INFO, logging.DEBUG
                 optimize:
-                    stop collecting extra info to spped up
+                    stop collecting extra info to sppeed up
                 suppress_raise:
                     swallow exceptions while logging, suggest to use this option
                     on prod env
@@ -65,10 +62,9 @@ class LogFactory(object):
             logger.addHandler(console_handler)
 
         if mode & LogMode.SYSLOG:
-            sys_handler = logging.handlers.SysLogHandler(
-                    address=cls._SYSLOG_SOCKET)
+            sys_handler = logging.handlers.SysLogHandler(address=cls._SYSLOG_SOCKET)
             sys_handler.setLevel(log_level)
-            sys_handler.setFormatter(cls._FORMATTER)
+            sys_handler.setFormatter(cls._JSON_FORMATTER)
             logger.addHandler(sys_handler)
 
         return logger

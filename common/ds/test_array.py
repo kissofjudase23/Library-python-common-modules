@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from ..array_utils import ArrayUtils
+from common.ds.array import ArrayUtils
 
 
 class TestArrayUtils(object):
@@ -23,7 +23,7 @@ class TestArrayUtils(object):
                                [8, 5, 2],
                                [9, 6, 3]])),
     ])
-    def test_is_unique_char(self, a, expected):
+    def test_rotate(self, a, expected):
         actual = ArrayUtils.rotate(a)
         assert np.array_equal(actual, expected) is True
 
@@ -44,6 +44,6 @@ class TestArrayUtils(object):
                                [15, 11, 7, 3],
                                [16, 12, 8, 4]])),
     ])
-    def test_is_unique_char(self, a, expected):
+    def test_roate_in_place(self, a, expected):
         actual = ArrayUtils.rotate_in_place(a)
         assert np.array_equal(actual, expected) is True

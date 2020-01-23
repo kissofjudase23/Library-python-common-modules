@@ -1,5 +1,6 @@
 [run]
 omit =
-    */__init__.py
-    */common/tests/*.py
+    ./__init__.py
+    ./common/*/test_*
+    ./common/test_*
 

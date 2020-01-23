@@ -1,6 +1,6 @@
 import pytest
 
-from ...algo import sort as SORT
+import common.algo.sort as sort_
 
 
 class TestSorting(object):
@@ -27,17 +27,17 @@ class TestSorting(object):
         expected = target.copy()
         expected.sort()
 
-        sorting_algorithms = [SORT.merge_sort,
-                              SORT.merge_sort_recursive,
-                              SORT.quick_sort,
-                              SORT.quick_sort_recursive,
-                              SORT.insertion_sort,
-                              SORT.insertion_sort_recursive,
-                              SORT.selection_sort,
-                              SORT.selection_sort_recursive,
-                              SORT.bubble_sort,
-                              SORT.bubble_sort_resursive,
-                              SORT.heap_sort]
+        sorting_algorithms = [sort_.merge_sort,
+                              sort_.merge_sort_recursive,
+                              sort_.quick_sort,
+                              sort_.quick_sort_recursive,
+                              sort_.insertion_sort,
+                              sort_.insertion_sort_recursive,
+                              sort_.selection_sort,
+                              sort_.selection_sort_recursive,
+                              sort_.bubble_sort,
+                              sort_.bubble_sort_resursive,
+                              sort_.heap_sort]
 
         for algo in sorting_algorithms:
             actual = target.copy()
@@ -49,5 +49,5 @@ class TestSorting(object):
         pytest.param([3, 5, 2, 1, 6, 4])
     ])
     def test_wiggle(self, target):
-        SORT.wiggle_sort(target)
-        assert SORT.check_wiggle(target) is True
+        sort_.wiggle_sort(target)
+        assert sort_.check_wiggle(target) is True

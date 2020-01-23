@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 
-from .exc import ArgError
+from common.exc import ArgError
 
 
 class ArrayUtils(object):
@@ -26,7 +26,7 @@ class ArrayUtils(object):
 
         for index, v in np.ndenumerate(a):
             r, c = index
-            rotated_array[c, col_num-1-r] = v
+            rotated_array[c, col_num - 1 - r] = v
 
         return rotated_array
 
@@ -46,7 +46,7 @@ class ArrayUtils(object):
 
         for r in range(row_num):
             for c in range(col_num):
-                rotated_array[c][row_num-1-r] = a[r][c]
+                rotated_array[c][row_num - 1 - r] = a[r][c]
 
         return rotated_array
 
@@ -74,12 +74,12 @@ class ArrayUtils(object):
             start = layer
             end = dim - 1 - layer
 
-            for offset in range(end-start):
-                tmp = a[start][start+offset]
-                a[start][start+offset] = a[end-offset][start]
-                a[end-offset][start] = a[end][end-offset]
-                a[end][end-offset] = a[start+offset][end]
-                a[start+offset][end] = tmp
+            for offset in range(end - start):
+                tmp = a[start][start + offset]
+                a[start][start + offset] = a[end - offset][start]
+                a[end - offset][start] = a[end][end - offset]
+                a[end][end - offset] = a[start + offset][end]
+                a[start + offset][end] = tmp
 
         return a
 
@@ -114,8 +114,8 @@ class ArrayUtils(object):
             for offset in range(end - start):
                 tmp = a[start, start + offset]
                 a[start, start + offset] = a[end - offset, start]
-                a[end - offset, start] = a[end, end-offset]
-                a[end, end-offset] = a[start + offset, end]
+                a[end - offset, start] = a[end, end - offset]
+                a[end, end - offset] = a[start + offset, end]
                 a[start + offset, end] = tmp
 
         return a

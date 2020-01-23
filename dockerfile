@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-LABEL "maintainer"="kissofjudase23@gmail.com" \
+LABEL "author"="kissofjudase23@gmail.com" \
       "type"="library"
 
 RUN apt-get -y update && \

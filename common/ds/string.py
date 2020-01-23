@@ -1,7 +1,5 @@
 import collections
-from pprint import pprint as pp
-
-from .exc import ArgError
+from common.exc import ArgError
 
 
 class StrUtils(object):
@@ -123,10 +121,10 @@ class StrUtils(object):
         if not s:
             raise ArgError()
 
-        if len(s) is 1:
+        if len(s) == 1:
             return True
 
-        start, end = 0, len(s)-1
+        start, end = 0, len(s) - 1
 
         while start < end:
             if s[start] == s[end]:
@@ -148,14 +146,14 @@ class StrUtils(object):
         if not s:
             raise ArgError()
 
-        if len(s) is 1:
+        if len(s) == 1:
             return True
 
         odd_cnt = 0
         m = collections.defaultdict(int)
         for c in s:
             m[c] += 1
-            if m[c] % 2 is 0:
+            if m[c] % 2 == 0:
                 odd_cnt -= 1
             else:
                 odd_cnt += 1
@@ -180,7 +178,7 @@ class StrUtils(object):
                 if p != 0:
                     # backward the prefix pointer to the position
                     # after the matched prefix/suffix string
-                    p = lps[p-1]
+                    p = lps[p - 1]
                 else:
                     # do not match anything
                     lps[s] = 0
@@ -214,7 +212,7 @@ class StrUtils(object):
                 if j != 0:
                     # backward the prefix pointer to the position
                     # after the matched prefix/suffix string
-                    j = lps[j-1]
+                    j = lps[j - 1]
                 else:
                     # do not match anything
                     i += 1
@@ -235,7 +233,7 @@ class StrUtils(object):
                 i -= 1
                 j -= 1
             else:
-                if memo[i][j] == memo[i-1][j]:
+                if memo[i][j] == memo[i - 1][j]:
                     i -= 1
                 else:  # memo[i][j] == memo[i][j-1]
                     j -= 1
@@ -261,24 +259,24 @@ class StrUtils(object):
 
         # init first row
         for j in range(1, l2):
-            if memo[0][j-1] or s2[j] == s1[0]:
+            if memo[0][j - 1] or s2[j] == s1[0]:
                 memo[0][j] = 1
 
         # init first column
         for i in range(1, l1):
-            if memo[i-1][0] or s1[i] == s2[0]:
+            if memo[i - 1][0] or s1[i] == s2[0]:
                 memo[i][0] = 1
 
         # complete the memo
         for i in range(1, l1):
             for j in range(1, l2):
                 if s1[i] == s2[j]:
-                    memo[i][j] = memo[i-1][j-1] + 1
+                    memo[i][j] = memo[i - 1][j - 1] + 1
                 else:
-                    memo[i][j] = max(memo[i-1][j], memo[i][j-1])
+                    memo[i][j] = max(memo[i - 1][j], memo[i][j - 1])
 
-        return StrUtils.traverse_lcs_memo(s1, l1-1,
-                                          s2, l2-1,
+        return StrUtils.traverse_lcs_memo(s1, l1 - 1,
+                                          s2, l2 - 1,
                                           memo)
 
 

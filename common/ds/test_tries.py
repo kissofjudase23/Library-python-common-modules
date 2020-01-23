@@ -1,6 +1,4 @@
-import pytest
-
-from ...ds.trie import Trie
+from common.ds.trie import Trie
 
 
 class TestStack(object):

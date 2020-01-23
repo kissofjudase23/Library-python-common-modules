@@ -1,6 +1,6 @@
 import pytest
 
-from ...algo import search
+from common.algo import search
 
 
 @pytest.fixture(scope='class')

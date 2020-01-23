@@ -1,6 +1,6 @@
 import pytest
 
-from ...ds.queue import Queue
+from common.ds.queue import Queue
 
 
 class TestQueue(object):

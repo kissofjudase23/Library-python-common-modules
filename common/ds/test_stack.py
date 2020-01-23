@@ -1,6 +1,6 @@
 import pytest
 
-from ...ds.stack import Stack
+from common.ds.stack import Stack
 
 
 class TestStack(object):

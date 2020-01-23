@@ -2,8 +2,8 @@
 
 import pytest
 
-from ..exc import ArgError
-from ..str_utils import StrUtils
+from common.exc import ArgError
+from common.ds.string import StrUtils
 
 
 class TestEncodeFormatter(object):
@@ -81,7 +81,7 @@ class TestEncodeFormatter(object):
         pytest.param(' a c ', '%20a%20c%20'),
         pytest.param('   ', '%20%20%20'),
     ])
-    def test_is_unique_char(self, s, expected):
+    def test_replace_space(self, s, expected):
         actual = StrUtils.replace_spaces(s, pattern='%20')
         assert actual == expected
 

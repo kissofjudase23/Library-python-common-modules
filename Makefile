@@ -14,12 +14,12 @@ test: clean_cache
 	pytest --pyargs -v ./
 
 coverage: clean_cache
-	pytest --pyargs --cov-report=html --cov-config=.coveragerc --cov=./
+	pytest --pyargs --cov=./ --cov-config=.coveragerc --cov-report=html
 
 up:
 	docker-compose up -d --build
 
-attach:
+tty:
 	docker exec -it $(SERVICE_NAME) /bin/bash
 
 down:
