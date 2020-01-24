@@ -4,8 +4,9 @@ import os
 import subprocess
 import shutil
 import pickle
+import pathlib
 
-from .exc import HDFSError
+from common.exc import HDFSError, SubProcessError
 
 
 class HDFSUtils(object):
@@ -36,12 +37,15 @@ class FileUtility(object):
         """
         p = subprocess.run(['wc', '-l', file_path],
                            stdout=subprocess.PIPE,
-                           stderr=subprocess.PIPE)
+                           stderr=subprocess.STDOUT,
+                           encoding="utf-8")
 
-        result, err = p.stdout, p.stderr
-        if p.returncode != 0:
-            raise IOError(err)
-        return int(result.strip().split()[0])
+        try:
+            p.check_returncode()
+        except subprocess.CalledProcessError as e:
+            raise SubProcessError(f"{e}, err={p.stdout}") from e
+
+        return int(p.stdout.strip().split()[0])
 
     @staticmethod
     def read_json_file(file_path):
@@ -65,37 +69,30 @@ class FileUtility(object):
 
     @staticmethod
     def mkdir_p(dir_path):
-        if os.path.isdir(dir_path):
+        p = pathlib.Path(dir_path)
+        p.mkdir(parents=True, exist_ok=True)
+
+    @staticmethod
+    def rm_folder(dir_path):
+        if not os.path.isdir(dir_path):
             return
 
-        os.makedirs(dir_path)
-
-        return dir_path
+        shutil.rmtree(dir_path)
 
     @staticmethod
-    def delete_folder(folder):
-        if folder and os.path.isdir(folder):
-            shutil.rmtree(folder)
+    def rm_file(file_path):
+        if not os.path.isfile(file_path):
+            return
+        os.unlink(file_path)
 
-    @staticmethod
-    def remove_and_create_folder(folder):
-        if os.path.exists(folder):
-            if os.path.isdir(folder):
-                shutil.rmtree(folder, ignore_errors=True)
-            else:
-                os.remove(folder)
+    @classmethod
+    def _get_glbo_path(cls,
+                       root_dir,
+                       *,
+                       file_prefix,
+                       file_suffix,
+                       recursive):
 
-        FileUtility.mkdir_p(folder)
-
-    @staticmethod
-    def get_file_list(root_dir, *,
-                      file_prefix=None,
-                      file_suffix=None,
-                      recursive=False,
-                      sort=False,
-                      limit=None):
-
-        # It would return an empty list if the root_dir does not exist
         file_name = '*'
 
         if file_prefix:
@@ -104,14 +101,36 @@ class FileUtility(object):
         if file_suffix:
             file_name = f'{file_name}{file_suffix}'
 
-        path_name = root_dir
+        glob_path = root_dir
 
         if recursive:
-            path_name = os.path.join(path_name, '**')
+            """
+            If recursive is true, the pattern '**' will match any files and zero or more directories,
+            subdirectories and symbolic links to directories.
+            If the pattern is followed by an os.sep or os.altsep then files will not match.
+            """
+            glob_path = os.path.join(glob_path, '**')
 
-        path_name = os.path.join(path_name, file_name)
+        glob_path = os.path.join(glob_path, file_name)
 
-        files = glob.glob(path_name, recursive=recursive)
+        return glob_path
+
+    @classmethod
+    def get_file_list(cls,
+                      root_dir,
+                      *,
+                      file_prefix=None,
+                      file_suffix=None,
+                      recursive=False,
+                      sort=False,
+                      limit=None):
+
+        glob_path = cls._get_glbo_path(root_dir,
+                                       file_prefix=file_prefix,
+                                       file_suffix=file_suffix,
+                                       recursive=recursive)
+
+        files = glob.glob(glob_path, recursive=recursive)
 
         if sort:
             files.sort()
@@ -121,30 +140,17 @@ class FileUtility(object):
 
         return files
 
-    @staticmethod
-    def get_file_generator(root_dir, *,
-                           recursive=False,
-                           file_prefix=None,
-                           file_suffix=None):
+    @classmethod
+    def get_file_list_generator(cls,
+                                root_dir,
+                                *,
+                                recursive=False,
+                                file_prefix=None,
+                                file_suffix=None):
 
-        file_name = '*'
+        glob_path = cls._get_glbo_path(root_dir,
+                                       file_prefix=file_prefix,
+                                       file_suffix=file_suffix,
+                                       recursive=recursive)
 
-        if file_prefix:
-            file_name = f'{file_prefix}{file_name}'
-
-        if file_suffix:
-            file_name = f'{file_name}{file_suffix}'
-
-        path_name = root_dir
-
-        if recursive:
-            path_name = os.path.join(path_name, '**')
-
-        path_name = os.path.join(path_name, file_name)
-
-        return glob.iglob(path_name, recursive=recursive)
-
-    @staticmethod
-    def delete_file(file_path):
-        if file_path and os.path.isfile(file_path):
-            os.unlink(file_path)
+        return glob.iglob(glob_path, recursive=recursive)

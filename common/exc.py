@@ -10,6 +10,10 @@ class ArgError(ModuleError):
     pass
 
 
+class SubProcessError(ModuleError):
+    pass
+
+
 # AWS Error
 class AwsError(ModuleError):
     pass
@@ -75,6 +79,7 @@ class ListObjectError(S3Error):
 
 class DeleteObjectError(S3Error):
     pass
+
 
 # File Error
 class FileError(ModuleError):
